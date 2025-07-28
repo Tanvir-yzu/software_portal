@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Portal - Browse Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+            <div class="flex justify-between items-center py-4 sm:py-6">
+                <div class="flex items-center">
+                    <i class="fas fa-download text-blue-600 text-xl sm:text-2xl mr-2 sm:mr-3"></i>
+                    <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Software Portal</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8" x-data="{ 
+        showFilters: false,
+        viewMode: window.innerWidth < 768 ? 'list' : 'grid'
+    }">
+        <!-- Search and Filter Section -->
+        <div class="bg-white rounded-lg shadow-sm p-3 sm:p-6 mb-4 sm:mb-8">
+            <div class="flex flex-col gap-4">
+                <!-- Search Bar -->
+                <div class="w-full">
+                    <form method="GET" class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm sm:text-base"></i>
+                        </div>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ search_query }}"
+                            placeholder="Search software..." 
+                            class="block w-full pl-8 sm:pl-10 pr-3 py-2 sm:py-3 border border-gray-300 rounded-md text-sm sm:text-base leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                        <input type="hidden" name="category" value="{{ selected_category }}">
+                    </form>
+                </div>
+
+                <!-- Filter and View Controls -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+                    <!-- Category Filter -->
+                    <div class="relative flex-1 sm:flex-none" x-data="{ open: false }">
+                        <button 
+                            @click="open = !open"
+                            class="w-full sm:w-auto inline-flex items-center justify-center px-3 sm:px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                            <i class="fas fa-filter mr-2"></i>
+                            <span class="hidden sm:inline">Category</span>
+                            <span class="sm:hidden">Filter by Category</span>
+                            <i class="fas fa-chevron-down ml-2"></i>
+                        </button>
+                        
+                        <div 
+                            x-show="open" 
+                            @click.away="open = false"
+                            x-transition
+                            class="absolute left-0 sm:right-0 mt-2 w-full sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
+                        >
+                            <div class="py-1">
+                                <a href="?search={{ search_query }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">All Categories</a>
+                                {% for category in categories %}
+                                <a href="?search={{ search_query }}&category={{ category.id }}" 
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {% if selected_category == category.id|stringformat:'s' %}bg-blue-50 text-blue-700{% endif %}">
+                                    {{ category.name }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- View Mode Toggle - Hidden on mobile -->
+                    <div class="hidden sm:flex rounded-md shadow-sm">
+                        <button 
+                            @click="viewMode = 'grid'"
+                            :class="viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                            class="px-3 py-2 rounded-l-md border border-gray-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button 
+                            @click="viewMode = 'list'"
+                            :class="viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                            class="px-3 py-2 rounded-r-md border border-l-0 border-gray-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Filters -->
+            {% if search_query or selected_category %}
+            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+                {% if search_query %}
+                <span class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-blue-100 text-blue-800">
+                    <span class="hidden sm:inline">Search: </span>"{{ search_query }}"
+                    <a href="?category={{ selected_category }}" class="ml-1 sm:ml-2 text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-times text-xs"></i>
+                    </a>
+                </span>
+                {% endif %}
+                {% if selected_category %}
+                <span class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-green-100 text-green-800">
+                    <span class="hidden sm:inline">Category: </span>{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }}{% endif %}{% endfor %}
+                    <a href="?search={{ search_query }}" class="ml-1 sm:ml-2 text-green-600 hover:text-green-800">
+                        <i class="fas fa-times text-xs"></i>
+                    </a>
+                </span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Results Count -->
+        <div class="flex justify-between items-center mb-4 sm:mb-6 px-1">
+            <p class="text-sm sm:text-base text-gray-600">
+                {% if page_obj %}
+                    <span class="hidden sm:inline">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of </span>{{ page_obj.paginator.count }} software<span class="hidden sm:inline"> found</span>
+                {% else %}
+                    {{ software_list|length }} software<span class="hidden sm:inline"> found</span>
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Software Grid View - Hidden on mobile -->
+        <div x-show="viewMode === 'grid'" class="hidden sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+            {% for software in software_list %}
+            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
+                <!-- Thumbnail -->
+                <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                    {% if software.thumbnail %}
+                        <img src="{{ software.thumbnail.url }}" alt="{{ software.title }}" class="w-full h-32 sm:h-40 lg:h-48 object-cover">
+                    {% else %}
+                        <div class="w-full h-32 sm:h-40 lg:h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                            <i class="fas fa-download text-white text-2xl sm:text-3xl lg:text-4xl"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Content -->
+                <div class="p-3 sm:p-4">
+                    <div class="flex items-start justify-between mb-2">
+                        <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 truncate">
+                            {% if software.pk %}
+                            <a href="{% url 'software:software_detail' software.pk %}" class="hover:text-blue-600 transition-colors">
+                                {{ software.title }}
+                            </a>
+                            {% else %}
+                            <span class="text-gray-500">{{ software.title }} (Invalid)</span>
+                            {% endif %}
+                        </h3>
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full ml-2 flex-shrink-0">v{{ software.version }}</span>
+                    </div>
+                    
+                    <p class="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-2">{{ software.description|truncatewords:15 }}</p>
+                    
+                    <div class="flex items-center justify-between text-xs sm:text-sm text-gray-500 mb-3">
+                        <span class="flex items-center truncate">
+                            <i class="fas fa-tag mr-1"></i>
+                            <span class="truncate">{{ software.category.name|default:"Uncategorized" }}</span>
+                        </span>
+                        <span class="flex items-center flex-shrink-0 ml-2">
+                            <i class="fas fa-download mr-1"></i>
+                            {{ software.download_count }}
+                        </span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs text-gray-400">{{ software.upload_date|date:"M d, Y" }}</span>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex gap-2">
+                        {% if software.pk %}
+                        <a href="{% url 'software:software_detail' software.pk %}" 
+                           class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors inline-flex items-center justify-center">
+                            <i class="fas fa-info-circle mr-1 sm:mr-2"></i>
+                            <span class="hidden sm:inline">Details</span>
+                            <span class="sm:hidden">Info</span>
+                        </a>
+                        <a href="{% url 'software:software_download' software.pk %}" 
+                           class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors inline-flex items-center justify-center">
+                            <i class="fas fa-download mr-1 sm:mr-2"></i>
+                            <span class="hidden sm:inline">Download</span>
+                            <span class="sm:hidden">Get</span>
+                        </a>
+                        {% else %}
+                        <span class="flex-1 bg-gray-300 text-gray-500 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium text-center">
+                            <i class="fas fa-exclamation-triangle mr-1 sm:mr-2"></i>
+                            Invalid
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-8 sm:py-12">
+                <i class="fas fa-search text-gray-300 text-4xl sm:text-6xl mb-4"></i>
+                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">No software found</h3>
+                <p class="text-sm sm:text-base text-gray-500">Try adjusting your search or filter criteria.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- List View - Default on mobile, optional on desktop -->
+        <div x-show="viewMode === 'list' || window.innerWidth < 768" class="bg-white rounded-lg shadow-sm overflow-hidden">
+            {% for software in software_list %}
+            <div class="border-b border-gray-200 last:border-b-0 p-3 sm:p-6 hover:bg-gray-50 transition-colors">
+                <div class="flex items-start space-x-3 sm:space-x-4">
+                    <!-- Thumbnail -->
+                    <div class="flex-shrink-0">
+                        {% if software.thumbnail %}
+                            <img src="{{ software.thumbnail.url }}" alt="{{ software.title }}" class="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover">
+                        {% else %}
+                            <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-download text-white text-sm sm:text-xl"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="flex-1 min-w-0">
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                            <div class="flex-1 min-w-0 mb-3 sm:mb-0">
+                                <div class="flex items-start justify-between mb-1 sm:mb-2">
+                                    <h3 class="text-sm sm:text-lg font-semibold text-gray-900 truncate">
+                                        {% if software.pk %}
+                                        <a href="{% url 'software:software_detail' software.pk %}" class="hover:text-blue-600 transition-colors">
+                                            {{ software.title }}
+                                        </a>
+                                        {% else %}
+                                        <span class="text-gray-500">{{ software.title }} (Invalid)</span>
+                                        {% endif %}
+                                    </h3>
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs ml-2 flex-shrink-0">v{{ software.version }}</span>
+                                </div>
+                                <p class="text-gray-600 text-xs sm:text-base mb-2 sm:mb-3 line-clamp-2">{{ software.description|truncatewords:20 }}</p>
+                                
+                                <!-- Mobile metadata -->
+                                <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 mb-2 sm:mb-0">
+                                    <span class="flex items-center">
+                                        <i class="fas fa-tag mr-1"></i>
+                                        <span class="truncate">{{ software.category.name|default:"Uncategorized" }}</span>
+                                    </span>
+                                    <span class="flex items-center">
+                                        <i class="fas fa-download mr-1"></i>
+                                        {{ software.download_count }}
+                                    </span>
+                                    <span class="flex items-center">
+                                        <i class="fas fa-calendar mr-1"></i>
+                                        {{ software.upload_date|date:"M d, Y" }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex gap-2 sm:ml-4 flex-shrink-0">
+                                {% if software.pk %}
+                                <a href="{% url 'software:software_detail' software.pk %}" 
+                                   class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors inline-flex items-center">
+                                    <i class="fas fa-info-circle mr-1 sm:mr-2"></i>
+                                    <span class="hidden sm:inline">Details</span>
+                                    <span class="sm:hidden">Info</span>
+                                </a>
+                                <a href="{% url 'software:software_download' software.pk %}" 
+                                   class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors inline-flex items-center">
+                                    <i class="fas fa-download mr-1 sm:mr-2"></i>
+                                    <span class="hidden sm:inline">Download</span>
+                                    <span class="sm:hidden">Get</span>
+                                </a>
+                                {% else %}
+                                <span class="bg-gray-300 text-gray-500 px-3 py-2 rounded-md text-xs sm:text-sm font-medium">
+                                    <i class="fas fa-exclamation-triangle mr-1 sm:mr-2"></i>
+                                    <span class="hidden sm:inline">Invalid Software</span>
+                                    <span class="sm:hidden">Invalid</span>
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-8 sm:py-12">
+                <i class="fas fa-search text-gray-300 text-4xl sm:text-6xl mb-4"></i>
+                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">No software found</h3>
+                <p class="text-sm sm:text-base text-gray-500">Try adjusting your search or filter criteria.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="mt-6 sm:mt-8">
+            <!-- Mobile Pagination -->
+            <div class="flex justify-between sm:hidden">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
+                       class="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        <i class="fas fa-chevron-left mr-1"></i>
+                        Previous
+                    </a>
+                {% else %}
+                    <span class="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-400 bg-gray-100">
+                        <i class="fas fa-chevron-left mr-1"></i>
+                        Previous
+                    </span>
+                {% endif %}
+                
+                <span class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700">
+                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
+                       class="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Next
+                        <i class="fas fa-chevron-right ml-1"></i>
+                    </a>
+                {% else %}
+                    <span class="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-400 bg-gray-100">
+                        Next
+                        <i class="fas fa-chevron-right ml-1"></i>
+                    </span>
+                {% endif %}
+            </div>
+            
+            <!-- Desktop Pagination -->
+            <div class="hidden sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
+                               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <span class="relative inline-flex items-center px-4 py-2 border border-blue-500 bg-blue-50 text-sm font-medium text-blue-600">
+                                    {{ num }}
+                                </span>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <a href="?page={{ num }}&search={{ search_query }}&category={{ selected_category }}" 
+                                   class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    {{ num }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
+                               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-8 sm:mt-16">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
+            <div class="text-center text-gray-500">
+                <p class="text-sm sm:text-base">&copy; {% now "Y" %} Software Portal by Tanvir. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Link copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>
