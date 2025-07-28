@@ -1,12 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+     {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Software Portal - Browse Software</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>{% if search_query %}{{ search_query }} - {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }} Software - {% endif %}{% endfor %}{% endif %}Software Portal - Download Free Software</title>
+    
+    <meta name="description" content="{% if search_query %}Search results for '{{ search_query }}' - {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }} software collection - {% endif %}{% endfor %}{% endif %}Browse and download free software from our comprehensive software portal. Find applications, tools, and utilities for all your needs.">
+    
+    <meta name="keywords" content="{% if search_query %}{{ search_query }}, {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }}, {% endif %}{% endfor %}{% endif %}free software, download software, applications, tools, utilities, software portal, freeware, open source">
+    
+    <meta name="author" content="Software Portal">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Software Portal">
+    <meta property="og:title" content="{% if search_query %}{{ search_query }} - {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }} Software - {% endif %}{% endfor %}{% endif %}Software Portal">
+    <meta property="og:description" content="{% if search_query %}Search results for '{{ search_query }}' - {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }} software collection - {% endif %}{% endfor %}{% endif %}Browse and download free software from our comprehensive software portal.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% static 'icon/android-chrome-512x512.png' %}">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="Software Portal Logo">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% if search_query %}{{ search_query }} - {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }} Software - {% endif %}{% endfor %}{% endif %}Software Portal">
+    <meta name="twitter:description" content="{% if search_query %}Search results for '{{ search_query }}' - {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }} software collection - {% endif %}{% endfor %}{% endif %}Browse and download free software from our comprehensive software portal.">
+    <meta name="twitter:image" content="{% static 'icon/android-chrome-512x512.png' %}">
+    <meta name="twitter:image:alt" content="Software Portal Logo">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="msapplication-TileColor" content="#2563eb">
+    <meta name="msapplication-TileImage" content="{% static 'icon/android-chrome-192x192.png' %}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    
+    <!-- Favicon and Icons -->
+    <link rel="shortcut icon" href="{% static 'icon/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icon/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'icon/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'icon/site.webmanifest' %}">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- CSS and JavaScript -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Software Portal",
+        "description": "Browse and download free software from our comprehensive software portal",
+        "url": "{{ request.build_absolute_uri|slice:':-1' }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "{{ request.build_absolute_uri|slice:':-1' }}?search={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Software Portal",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{% static 'icon/android-chrome-512x512.png' %}"
+            }
+        }
+    }
+    </script>
+    
+    {% if software_list %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "{% if search_query %}{{ search_query }} - {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }} {% endif %}{% endfor %}{% endif %}Software Collection",
+        "description": "Collection of software available for download",
+        "numberOfItems": "{% if page_obj %}{{ page_obj.paginator.count }}{% else %}{{ software_list|length }}{% endif %}",
+        "itemListElement": [
+            {% for software in software_list %}
+            {
+                "@type": "SoftwareApplication",
+                "position": {{ forloop.counter }},
+                "name": "{{ software.title|escapejs }}",
+                "description": "{{ software.description|truncatewords:20|escapejs }}",
+                "softwareVersion": "{{ software.version|escapejs }}",
+                "applicationCategory": "{{ software.category.name|default:'Software'|escapejs }}",
+                "downloadUrl": "{% if software.pk %}{{ request.build_absolute_uri|slice:':-1' }}{% url 'software:software_download' software.pk %}{% endif %}",
+                "url": "{% if software.pk %}{{ request.build_absolute_uri|slice:':-1' }}{% url 'software:software_detail' software.pk %}{% endif %}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+    </script>
+    {% endif %}
+    
     <style>
         .line-clamp-2 {
             display: -webkit-box;

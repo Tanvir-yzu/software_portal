@@ -1,9 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
+     {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ software.title }} - Software Portal</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>{{ software.title }} v{{ software.version }} - Download Free Software | Software Portal</title>
+    <meta name="title" content="{{ software.title }} v{{ software.version }} - Download Free Software | Software Portal">
+    <meta name="description" content="Download {{ software.title }} v{{ software.version }} for free. {{ software.description|truncatewords:25|striptags }} Available for immediate download with {{ software.download_count }} downloads.">
+    <meta name="keywords" content="{{ software.title }}, {{ software.version }}, {% if software.category %}{{ software.category.name }}, {% endif %}free software, download, {{ software.title|lower }} download, software portal">
+    <meta name="author" content="Software Portal">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{{ software.title }} v{{ software.version }} - Free Download">
+    <meta property="og:description" content="Download {{ software.title }} v{{ software.version }} for free. {{ software.description|truncatewords:25|striptags }} {{ software.download_count }} downloads available.">
+    {% if software.thumbnail %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ software.thumbnail.url }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ software.title }} v{{ software.version }} preview">
+    {% else %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'icon/favicon.ico' %}">
+    {% endif %}
+    <meta property="og:site_name" content="Software Portal">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta property="twitter:title" content="{{ software.title }} v{{ software.version }} - Free Download">
+    <meta property="twitter:description" content="Download {{ software.title }} v{{ software.version }} for free. {{ software.description|truncatewords:25|striptags }}">
+    {% if software.thumbnail %}
+    <meta property="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ software.thumbnail.url }}">
+    <meta property="twitter:image:alt" content="{{ software.title }} v{{ software.version }} preview">
+    {% else %}
+    <meta property="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'icon/favicon.ico' %}">
+    {% endif %}
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#3B82F6">
+    <meta name="msapplication-TileColor" content="#3B82F6">
+    <meta name="application-name" content="Software Portal">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "{{ software.title }}",
+        "version": "{{ software.version }}",
+        "description": "{{ software.description|striptags|escapejs }}",
+        "url": "{{ request.build_absolute_uri }}",
+        {% if software.thumbnail %}
+        "image": "{{ request.scheme }}://{{ request.get_host }}{{ software.thumbnail.url }}",
+        {% endif %}
+        "downloadUrl": "{{ request.scheme }}://{{ request.get_host }}{% url 'software:software_download' software.pk %}",
+        "datePublished": "{{ software.upload_date|date:'c' }}",
+        "dateModified": "{{ software.upload_date|date:'c' }}",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Software Portal",
+            "url": "{{ request.scheme }}://{{ request.get_host }}"
+        },
+        {% if software.category %}
+        "applicationCategory": "{{ software.category.name }}",
+        {% endif %}
+        "operatingSystem": "Windows, macOS, Linux",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.5",
+            "ratingCount": "{{ software.download_count }}"
+        },
+        "interactionStatistic": {
+            "@type": "InteractionCounter",
+            "interactionType": "https://schema.org/DownloadAction",
+            "userInteractionCount": "{{ software.download_count }}"
+        }
+    }
+    </script>
+    
+    <!-- Breadcrumb Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'software:software_list' %}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Software",
+                "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'software:software_list' %}"
+            }{% if software.category %},
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "{{ software.category.name }}",
+                "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'software:software_list' %}?category={{ software.category.pk }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "{{ software.title }}",
+                "item": "{{ request.build_absolute_uri }}"
+            }{% else %},
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "{{ software.title }}",
+                "item": "{{ request.build_absolute_uri }}"
+            }{% endif %}
+        ]
+    }
+    </script>
+    
+    <!-- Favicons and Icons -->
+    <link rel="shortcut icon" href="{% static 'icon/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="{% static 'icon/favicon.ico' %}">
+    <link rel="apple-touch-icon" href="{% static 'icon/favicon.ico' %}">
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- CSS and JavaScript -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
