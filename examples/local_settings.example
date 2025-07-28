@@ -20,8 +20,8 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '185.227.134.143',
-    'exceltech.com.bd',
-    'www.exceltech.com.bd',
+    'en2bn.com',
+    'www.en2bn.com',
 
 ]
 
