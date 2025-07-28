@@ -2,13 +2,13 @@
 # https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/uwsgi/
 
 # the base directory (full path)
-chdir           = /opt/Excel_tech
+chdir           = /opt/software_portal
 
 # Django's wsgi file
-module          = Excel_tech.wsgi
+module          = software_portal.wsgi
 
 # the virtualenv (full path)
-home            = /opt/Excel_tech/venv
+home            = /opt/software_portal/venv
 
 # process-related settings
 master          = true
@@ -19,7 +19,7 @@ threads         = 2
 enable-threads  = True
 
 # the socket (use the full path to be safe)
-socket          = /opt/Excel_tech/uwsgi/uwsgi.sock
+socket          = /opt/software_portal/uwsgi/uwsgi.sock
 
 # ... with appropriate permissions - may be needed
 chmod-socket    = 666
