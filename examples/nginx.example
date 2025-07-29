@@ -4,7 +4,7 @@ upstream uwsgi_software_portal {
 
 server {
         listen 80;
-        server_name exceltech.com.bd www.exceltech.com.bd;
+        server_name en2bn.com www.en2bn.com;
 
         access_log /opt/software_portal/logs/access.log;
         error_log /opt/software_portal/logs/error.log;
