@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-     {% load static %}
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,14 +51,7 @@
     <link rel="apple-touch-icon" href="{% static 'icon/apple-touch-icon.png' %}">
     <link rel="manifest" href="{% static 'icon/site.webmanifest' %}">
     
-    <!-- Preconnect for Performance -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="preconnect" href="https://unpkg.com">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    
-    <!-- CSS and JavaScript -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Structured Data (JSON-LD) -->
@@ -115,120 +108,1325 @@
     {% endif %}
     
     <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+       body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 12px;
+            width: 100%;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mobile-only {
+            display: inline;
+        }
+
+        .hidden-mobile {
+            display: none;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            min-height: 60px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header-icon {
+            color: #2563eb;
+            font-size: 18px;
+            margin-right: 6px;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111827;
+            white-space: nowrap;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 12px 0;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .search-form {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .dropdown {
+            position: relative;
+            width: 100%;
+        }
+
+        .dropdown-button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .dropdown-button:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .dropdown-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 4px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 20;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f3f4f6;
+        }
+
+        .dropdown-item.active {
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-weight: 500;
+        }
+
+        /* View Mode Toggle */
+        .view-toggle {
+            display: none;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .view-toggle-button {
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+        }
+
+        .view-toggle-button:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .view-toggle-button:last-child {
+            border-radius: 0 8px 8px 0;
+            border-left: none;
+        }
+
+        .view-toggle-button:hover {
+            background: #f9fafb;
+        }
+
+        .view-toggle-button.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        /* Active Filters */
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .filter-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            max-width: 100%;
+        }
+
+        .filter-tag.search {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .filter-tag.category {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .filter-tag a {
+            margin-left: 6px;
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .filter-tag a:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Results Count */
+        .results-count {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .results-text {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Grid View */
+        .grid-view {
+            display: none;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .software-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #f3f4f6;
+        }
+
+        .software-card:hover {
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-thumbnail {
+            width: 100%;
+            height: 140px;
+            background: #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .software-card:hover .card-thumbnail img {
+            transform: scale(1.05);
+        }
+
+        .card-thumbnail-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #60a5fa, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .card-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .card-title a:hover {
+            color: #2563eb;
+        }
+
+        .version-badge {
+            font-size: 10px;
+            background: #f3f4f6;
+            color: #6b7280;
+            padding: 3px 8px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            font-weight: 500;
+        }
+
+        .card-description {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 12px;
+            gap: 8px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .meta-item i {
+            flex-shrink: 0;
+        }
+
+        .card-date {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            min-height: 40px;
+            gap: 6px;
+        }
+
+        .btn i {
+            font-size: 12px;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            border: 1px solid #2563eb;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        .btn-disabled {
+            background: #d1d5db;
+            color: #9ca3af;
+            cursor: not-allowed;
+            border: 1px solid #d1d5db;
+        }
+
+        /* List View */
+        .list-view {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #f3f4f6;
+        }
+
+        .list-item {
+            border-bottom: 1px solid #f3f4f6;
+            padding: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background: #f9fafb;
+        }
+
+        .list-item-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .list-thumbnail {
+            width: 56px;
+            height: 56px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .list-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .list-thumbnail-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #60a5fa, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .list-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .list-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            gap: 8px;
+        }
+
+        .list-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .list-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .list-title a:hover {
+            color: #2563eb;
+        }
+
+        .list-description {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .list-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+
+        .list-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            margin-top: 8px;
+        }
+
+        .list-actions .btn {
+            padding: 8px 12px;
+            font-size: 12px;
+            min-height: 36px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 16px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #f3f4f6;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #d1d5db;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #9ca3af;
+            line-height: 1.5;
+        }
+
+        /* Pagination */
+        .pagination {
+            margin-top: 32px;
+        }
+
+        .pagination-mobile {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .pagination-desktop {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+            text-align: center;
+            flex: 1;
+        }
+
+        .pagination-nav {
+            display: flex;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .pagination-link {
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            gap: 4px;
+        }
+
+        .pagination-link:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .pagination-link:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+        .pagination-link:not(:first-child) {
+            border-left: none;
+        }
+
+        .pagination-link:hover:not(.disabled) {
+            background: #f9fafb;
+        }
+
+        .pagination-link.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .pagination-link.disabled {
+            background: #f3f4f6;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 48px;
+        }
+
+        .footer-content {
+            text-align: center;
+            padding: 24px 0;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        /* Responsive Design - Mobile First Approach */
+        
+        /* Small Mobile (320px+) */
+        @media (max-width: 374px) {
+            .container {
+                padding: 0 8px;
+            }
+            
+            .header-title {
+                font-size: 14px;
+            }
+            
+            .search-filter-section {
+                padding: 12px;
+            }
+            
+            .card-content {
+                padding: 12px;
+            }
+            
+            .btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .filter-tag {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+        }
+
+        /* Large Mobile (375px+) */
+        @media (min-width: 375px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .card-thumbnail {
+                height: 160px;
+            }
+            
+            .card-thumbnail-placeholder {
+                font-size: 32px;
+            }
+        }
+
+        /* Small Tablet (640px+) */
+        @media (min-width: 640px) {
+            .mobile-only {
+                display: none;
+            }
+
+            .hidden-mobile {
+                display: inline;
+            }
+
+            .header-content {
+                padding: 20px 0;
+                min-height: 80px;
+            }
+
+            .header-icon {
+                font-size: 24px;
+                margin-right: 12px;
+            }
+
+            .header-title {
+                font-size: 20px;
+            }
+
+            .main-content {
+                padding: 24px 0;
+            }
+
+            .search-filter-section {
+                padding: 24px;
+                margin-bottom: 24px;
+            }
+
+            .search-input {
+                padding: 14px 20px 14px 48px;
+                font-size: 16px;
+            }
+
+            .search-icon {
+                left: 20px;
+            }
+
+            .filter-controls {
+                flex-direction: row;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .dropdown {
+                flex: none;
+                width: auto;
+                min-width: 200px;
+            }
+
+            .dropdown-button {
+                width: auto;
+                min-width: 200px;
+            }
+
+            .dropdown-menu {
+                right: 0;
+                left: auto;
+                width: 280px;
+            }
+
+            .view-toggle {
+                display: flex;
+            }
+
+            .active-filters {
+                margin-top: 20px;
+            }
+
+            .filter-tag {
+                padding: 6px 14px;
+                font-size: 13px;
+            }
+
+            .results-count {
+                margin-bottom: 20px;
+            }
+
+            .results-text {
+                font-size: 15px;
+            }
+
+            .grid-view {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .list-view {
+                display: none;
+            }
+
+            .list-item {
+                padding: 20px;
+            }
+
+            .list-item-content {
+                gap: 16px;
+            }
+
+            .list-thumbnail {
+                width: 72px;
+                height: 72px;
+            }
+
+            .list-thumbnail-placeholder {
+                font-size: 20px;
+            }
+
+            .list-title {
+                font-size: 16px;
+            }
+
+            .list-description {
+                font-size: 14px;
+            }
+
+            .list-meta {
+                gap: 16px;
+                font-size: 13px;
+            }
+
+            .empty-state {
+                padding: 64px 32px;
+            }
+
+            .empty-state i {
+                font-size: 64px;
+            }
+
+            .empty-state h3 {
+                font-size: 20px;
+            }
+
+            .empty-state p {
+                font-size: 15px;
+            }
+
+            .pagination {
+                margin-top: 40px;
+            }
+
+            .pagination-mobile {
+                display: none;
+            }
+
+            .pagination-desktop {
+                display: flex;
+            }
+
+            .footer {
+                margin-top: 64px;
+            }
+
+            .footer-content {
+                padding: 32px 0;
+                font-size: 15px;
+            }
+        }
+
+        /* Medium Tablet (768px+) */
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 24px;
+            }
+
+            .grid-view {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .card-thumbnail {
+                height: 180px;
+            }
+
+            .card-thumbnail-placeholder {
+                font-size: 36px;
+            }
+
+            .card-content {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 16px;
+            }
+
+            .card-description {
+                font-size: 14px;
+            }
+
+            .card-meta {
+                font-size: 13px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+
+            .list-thumbnail {
+                width: 80px;
+                height: 80px;
+            }
+
+            .list-actions .btn {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+        }
+
+        /* Large Tablet/Small Desktop (1024px+) */
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 32px;
+            }
+
+            .header-title {
+                font-size: 24px;
+            }
+
+            .main-content {
+                padding: 32px 0;
+            }
+
+            .search-filter-section {
+                padding: 32px;
+                margin-bottom: 32px;
+            }
+
+            .grid-view {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 28px;
+            }
+
+            .card-thumbnail {
+                height: 200px;
+            }
+
+            .card-thumbnail-placeholder {
+                font-size: 40px;
+            }
+
+            .card-title {
+                font-size: 17px;
+            }
+
+            .card-description {
+                font-size: 14px;
+            }
+
+            .list-thumbnail {
+                width: 88px;
+                height: 88px;
+            }
+
+            .list-title {
+                font-size: 17px;
+            }
+
+            .list-description {
+                font-size: 15px;
+            }
+
+            .pagination {
+                margin-top: 48px;
+            }
+        }
+
+        /* Desktop (1280px+) */
+        @media (min-width: 1280px) {
+            .grid-view {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 32px;
+            }
+
+            .card-thumbnail {
+                height: 220px;
+            }
+
+            .card-title {
+                font-size: 18px;
+            }
+
+            .card-description {
+                font-size: 15px;
+            }
+        }
+
+        /* Large Desktop (1536px+) */
+        @media (min-width: 1536px) {
+            .container {
+                max-width: 1536px;
+                padding: 0 48px;
+            }
+
+            .grid-view {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 36px;
+            }
+
+            .search-filter-section {
+                padding: 40px;
+            }
+        }
+
+        /* Ultra-wide Desktop (1920px+) */
+        @media (min-width: 1920px) {
+            .container {
+                max-width: 1800px;
+            }
+
+            .grid-view {
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+
+        /* JavaScript-controlled visibility */
+        .js-grid-view {
+            display: none;
+        }
+
+        .js-list-view {
+            display: block;
+        }
+
+        @media (min-width: 640px) {
+            .js-grid-view {
+                display: grid;
+            }
+
+            .js-list-view {
+                display: none;
+            }
+        }
+
+        .js-grid-view.active {
+            display: grid !important;
+        }
+
+        .js-list-view.active {
+            display: block !important;
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .btn {
+                min-height: 44px;
+                padding: 12px 16px;
+            }
+
+            .dropdown-button {
+                min-height: 44px;
+            }
+
+            .pagination-link {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            .view-toggle-button {
+                min-height: 44px;
+                min-width: 44px;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .card-thumbnail img,
+            .list-thumbnail img {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+            }
+        }
+
+        /* Reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #111827;
+                color: #f9fafb;
+            }
+
+            .header,
+            .search-filter-section,
+            .software-card,
+            .list-view,
+            .empty-state,
+            .footer {
+                background: #1f2937;
+                border-color: #374151;
+            }
+
+            .search-input,
+            .dropdown-button {
+                background: #374151;
+                border-color: #4b5563;
+                color: #f9fafb;
+            }
+
+            .search-input:focus,
+            .dropdown-button:focus {
+                border-color: #60a5fa;
+            }
+
+            .dropdown-menu {
+                background: #374151;
+                border-color: #4b5563;
+            }
+
+            .dropdown-item {
+                color: #f9fafb;
+                border-color: #4b5563;
+            }
+
+            .dropdown-item:hover {
+                background: #4b5563;
+            }
+
+            .btn-secondary {
+                background: #374151;
+                color: #f9fafb;
+                border-color: #4b5563;
+            }
+
+            .btn-secondary:hover {
+                background: #4b5563;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body>
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b">
-        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-            <div class="flex justify-between items-center py-4 sm:py-6">
-                <div class="flex items-center">
-                    <i class="fas fa-download text-blue-600 text-xl sm:text-2xl mr-2 sm:mr-3"></i>
-                    <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900">Software Portal</h1>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-brand" style="display: flex; align-items: center; flex-shrink: 0;">
+                    <a href="/" style="display: flex; align-items: center; text-decoration: none;">
+                        <i class="fas fa-download header-icon" style="color: #2563eb; font-size: 18px; margin-right: 6px;"></i>
+                        <h1 class="header-title" style="font-size: 16px; font-weight: bold; color: #111827; white-space: nowrap;">Software Portal</h1>
+                    </a>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8" x-data="{ 
-        showFilters: false,
-        viewMode: window.innerWidth < 768 ? 'list' : 'grid'
-    }">
+    <main class="container main-content">
         <!-- Search and Filter Section -->
-        <div class="bg-white rounded-lg shadow-sm p-3 sm:p-6 mb-4 sm:mb-8">
-            <div class="flex flex-col gap-4">
-                <!-- Search Bar -->
-                <div class="w-full">
-                    <form method="GET" class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400 text-sm sm:text-base"></i>
-                        </div>
-                        <input 
-                            type="text" 
-                            name="search" 
-                            value="{{ search_query }}"
-                            placeholder="Search software..." 
-                            class="block w-full pl-8 sm:pl-10 pr-3 py-2 sm:py-3 border border-gray-300 rounded-md text-sm sm:text-base leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                        <input type="hidden" name="category" value="{{ selected_category }}">
-                    </form>
+        <div class="search-filter-section">
+            <!-- Search Bar -->
+            <form method="GET" class="search-form">
+                <i class="fas fa-search search-icon"></i>
+                <input 
+                    type="text" 
+                    name="search" 
+                    value="{{ search_query }}"
+                    placeholder="Search software..." 
+                    class="search-input"
+                    autocomplete="off"
+                >
+                <input type="hidden" name="category" value="{{ selected_category }}">
+            </form>
+
+            <!-- Filter and View Controls -->
+            <div class="filter-controls">
+                <!-- Category Filter -->
+                <div class="dropdown">
+                    <button type="button" class="dropdown-button" onclick="toggleDropdown(this)" aria-expanded="false">
+                        <span style="display: flex; align-items: center;">
+                            <i class="fas fa-filter" style="margin-right: 8px;"></i>
+                            <span class="filter-text">
+                                {% if selected_category %}
+                                    {% for category in categories %}
+                                        {% if category.id|stringformat:'s' == selected_category %}{{ category.name }}{% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    All Categories
+                                {% endif %}
+                            </span>
+                        </span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    
+                    <div class="dropdown-menu hidden" role="menu">
+                        <a href="?search={{ search_query }}" class="dropdown-item {% if not selected_category %}active{% endif %}" role="menuitem">All Categories</a>
+                        {% for category in categories %}
+                        <a href="?search={{ search_query }}&category={{ category.id }}" 
+                           class="dropdown-item {% if selected_category == category.id|stringformat:'s' %}active{% endif %}"
+                           role="menuitem">
+                            {{ category.name }}
+                        </a>
+                        {% endfor %}
+                    </div>
                 </div>
 
-                <!-- Filter and View Controls -->
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-                    <!-- Category Filter -->
-                    <div class="relative flex-1 sm:flex-none" x-data="{ open: false }">
-                        <button 
-                            @click="open = !open"
-                            class="w-full sm:w-auto inline-flex items-center justify-center px-3 sm:px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        >
-                            <i class="fas fa-filter mr-2"></i>
-                            <span class="hidden sm:inline">Category</span>
-                            <span class="sm:hidden">Filter by Category</span>
-                            <i class="fas fa-chevron-down ml-2"></i>
-                        </button>
-                        
-                        <div 
-                            x-show="open" 
-                            @click.away="open = false"
-                            x-transition
-                            class="absolute left-0 sm:right-0 mt-2 w-full sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
-                        >
-                            <div class="py-1">
-                                <a href="?search={{ search_query }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">All Categories</a>
-                                {% for category in categories %}
-                                <a href="?search={{ search_query }}&category={{ category.id }}" 
-                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {% if selected_category == category.id|stringformat:'s' %}bg-blue-50 text-blue-700{% endif %}">
-                                    {{ category.name }}
-                                </a>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- View Mode Toggle - Hidden on mobile -->
-                    <div class="hidden sm:flex rounded-md shadow-sm">
-                        <button 
-                            @click="viewMode = 'grid'"
-                            :class="viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
-                            class="px-3 py-2 rounded-l-md border border-gray-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        >
-                            <i class="fas fa-th"></i>
-                        </button>
-                        <button 
-                            @click="viewMode = 'list'"
-                            :class="viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
-                            class="px-3 py-2 rounded-r-md border border-l-0 border-gray-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        >
-                            <i class="fas fa-list"></i>
-                        </button>
-                    </div>
+                <!-- View Mode Toggle -->
+                <div class="view-toggle" role="group" aria-label="View mode">
+                    <button type="button" class="view-toggle-button active" onclick="setViewMode('grid', this)" aria-label="Grid view">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button type="button" class="view-toggle-button" onclick="setViewMode('list', this)" aria-label="List view">
+                        <i class="fas fa-list"></i>
+                    </button>
                 </div>
             </div>
 
             <!-- Active Filters -->
             {% if search_query or selected_category %}
-            <div class="mt-3 sm:mt-4 flex flex-wrap gap-2">
+            <div class="active-filters">
                 {% if search_query %}
-                <span class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-blue-100 text-blue-800">
-                    <span class="hidden sm:inline">Search: </span>"{{ search_query }}"
-                    <a href="?category={{ selected_category }}" class="ml-1 sm:ml-2 text-blue-600 hover:text-blue-800">
-                        <i class="fas fa-times text-xs"></i>
+                <span class="filter-tag search">
+                    <span class="hidden-mobile">Search: </span>"{{ search_query|truncatechars:20 }}"
+                    <a href="?category={{ selected_category }}" aria-label="Remove search filter">
+                        <i class="fas fa-times"></i>
                     </a>
                 </span>
                 {% endif %}
                 {% if selected_category %}
-                <span class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-green-100 text-green-800">
-                    <span class="hidden sm:inline">Category: </span>{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }}{% endif %}{% endfor %}
-                    <a href="?search={{ search_query }}" class="ml-1 sm:ml-2 text-green-600 hover:text-green-800">
-                        <i class="fas fa-times text-xs"></i>
+                <span class="filter-tag category">
+                    <span class="hidden-mobile">Category: </span>
+                    {% for category in categories %}
+                        {% if category.id|stringformat:'s' == selected_category %}{{ category.name|truncatechars:15 }}{% endif %}
+                    {% endfor %}
+                    <a href="?search={{ search_query }}" aria-label="Remove category filter">
+                        <i class="fas fa-times"></i>
                     </a>
                 </span>
                 {% endif %}
@@ -237,274 +1435,627 @@
         </div>
 
         <!-- Results Count -->
-        <div class="flex justify-between items-center mb-4 sm:mb-6 px-1">
-            <p class="text-sm sm:text-base text-gray-600">
+        <div class="results-count">
+            <p class="results-text">
                 {% if page_obj %}
-                    <span class="hidden sm:inline">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of </span>{{ page_obj.paginator.count }} software<span class="hidden sm:inline"> found</span>
+                    <span class="hidden-mobile">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of </span>{{ page_obj.paginator.count }} software<span class="hidden-mobile"> found</span>
                 {% else %}
-                    {{ software_list|length }} software<span class="hidden sm:inline"> found</span>
+                    {{ software_list|length }} software<span class="hidden-mobile"> found</span>
                 {% endif %}
             </p>
         </div>
 
-        <!-- Software Grid View - Hidden on mobile -->
-        <div x-show="viewMode === 'grid'" class="hidden sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+        <!-- Software Grid View -->
+        <div class="grid-view js-grid-view" id="gridView">
             {% for software in software_list %}
-            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
+            <article class="software-card">
                 <!-- Thumbnail -->
-                <div class="aspect-w-16 aspect-h-9 bg-gray-200">
+                <div class="card-thumbnail">
                     {% if software.thumbnail %}
-                        <img src="{{ software.thumbnail.url }}" alt="{{ software.title }}" class="w-full h-32 sm:h-40 lg:h-48 object-cover">
+                        <img src="{{ software.thumbnail.url }}" alt="{{ software.title }}" loading="lazy">
                     {% else %}
-                        <div class="w-full h-32 sm:h-40 lg:h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                            <i class="fas fa-download text-white text-2xl sm:text-3xl lg:text-4xl"></i>
+                        <div class="card-thumbnail-placeholder">
+                            <i class="fas fa-download"></i>
                         </div>
                     {% endif %}
                 </div>
                 
                 <!-- Content -->
-                <div class="p-3 sm:p-4">
-                    <div class="flex items-start justify-between mb-2">
-                        <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 truncate">
+                <div class="card-content">
+                    <div class="card-header">
+                        <h3 class="card-title">
                             {% if software.pk %}
-                            <a href="{% url 'software:software_detail' software.pk %}" class="hover:text-blue-600 transition-colors">
+                            <a href="{% url 'software:software_detail' software.pk %}">
                                 {{ software.title }}
                             </a>
                             {% else %}
-                            <span class="text-gray-500">{{ software.title }} (Invalid)</span>
+                            <span style="color: #9ca3af;">{{ software.title }} (Invalid)</span>
                             {% endif %}
                         </h3>
-                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full ml-2 flex-shrink-0">v{{ software.version }}</span>
+                        <span class="version-badge">v{{ software.version }}</span>
                     </div>
                     
-                    <p class="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-2">{{ software.description|truncatewords:15 }}</p>
+                    <p class="card-description line-clamp-2">{{ software.description|truncatewords:15 }}</p>
                     
-                    <div class="flex items-center justify-between text-xs sm:text-sm text-gray-500 mb-3">
-                        <span class="flex items-center truncate">
-                            <i class="fas fa-tag mr-1"></i>
+                    <div class="card-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-tag"></i>
                             <span class="truncate">{{ software.category.name|default:"Uncategorized" }}</span>
                         </span>
-                        <span class="flex items-center flex-shrink-0 ml-2">
-                            <i class="fas fa-download mr-1"></i>
+                        <span class="meta-item">
+                            <i class="fas fa-download"></i>
                             {{ software.download_count }}
                         </span>
                     </div>
                     
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-xs text-gray-400">{{ software.upload_date|date:"M d, Y" }}</span>
-                    </div>
+                    <div class="card-date">{{ software.upload_date|date:"M d, Y" }}</div>
                     
                     <!-- Action Buttons -->
-                    <div class="flex gap-2">
+                    <div class="card-actions">
                         {% if software.pk %}
-                        <a href="{% url 'software:software_detail' software.pk %}" 
-                           class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors inline-flex items-center justify-center">
-                            <i class="fas fa-info-circle mr-1 sm:mr-2"></i>
-                            <span class="hidden sm:inline">Details</span>
-                            <span class="sm:hidden">Info</span>
+                        <a href="{% url 'software:software_detail' software.pk %}" class="btn btn-secondary">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="hidden-mobile">Details</span>
+                            <span class="mobile-only">Info</span>
                         </a>
-                        <a href="{% url 'software:software_download' software.pk %}" 
-                           class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors inline-flex items-center justify-center">
-                            <i class="fas fa-download mr-1 sm:mr-2"></i>
-                            <span class="hidden sm:inline">Download</span>
-                            <span class="sm:hidden">Get</span>
+                        <a href="{% url 'software:software_download' software.pk %}" class="btn btn-primary">
+                            <i class="fas fa-download"></i>
+                            <span class="hidden-mobile">Download</span>
+                            <span class="mobile-only">Get</span>
                         </a>
                         {% else %}
-                        <span class="flex-1 bg-gray-300 text-gray-500 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-medium text-center">
-                            <i class="fas fa-exclamation-triangle mr-1 sm:mr-2"></i>
+                        <span class="btn btn-disabled">
+                            <i class="fas fa-exclamation-triangle"></i>
                             Invalid
                         </span>
                         {% endif %}
                     </div>
                 </div>
-            </div>
+            </article>
             {% empty %}
-            <div class="col-span-full text-center py-8 sm:py-12">
-                <i class="fas fa-search text-gray-300 text-4xl sm:text-6xl mb-4"></i>
-                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">No software found</h3>
-                <p class="text-sm sm:text-base text-gray-500">Try adjusting your search or filter criteria.</p>
+            <div class="empty-state" style="grid-column: 1 / -1;">
+                <i class="fas fa-search"></i>
+                <h3>No software found</h3>
+                <p>Try adjusting your search or filter criteria.</p>
             </div>
             {% endfor %}
         </div>
 
-        <!-- List View - Default on mobile, optional on desktop -->
-        <div x-show="viewMode === 'list' || window.innerWidth < 768" class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <!-- List View -->
+        <div class="list-view js-list-view" id="listView">
             {% for software in software_list %}
-            <div class="border-b border-gray-200 last:border-b-0 p-3 sm:p-6 hover:bg-gray-50 transition-colors">
-                <div class="flex items-start space-x-3 sm:space-x-4">
+            <article class="list-item">
+                <div class="list-item-content">
                     <!-- Thumbnail -->
-                    <div class="flex-shrink-0">
+                    <div class="list-thumbnail">
                         {% if software.thumbnail %}
-                            <img src="{{ software.thumbnail.url }}" alt="{{ software.title }}" class="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover">
+                            <img src="{{ software.thumbnail.url }}" alt="{{ software.title }}" loading="lazy">
                         {% else %}
-                            <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-download text-white text-sm sm:text-xl"></i>
+                            <div class="list-thumbnail-placeholder">
+                                <i class="fas fa-download"></i>
                             </div>
                         {% endif %}
                     </div>
                     
                     <!-- Content -->
-                    <div class="flex-1 min-w-0">
-                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-                            <div class="flex-1 min-w-0 mb-3 sm:mb-0">
-                                <div class="flex items-start justify-between mb-1 sm:mb-2">
-                                    <h3 class="text-sm sm:text-lg font-semibold text-gray-900 truncate">
-                                        {% if software.pk %}
-                                        <a href="{% url 'software:software_detail' software.pk %}" class="hover:text-blue-600 transition-colors">
-                                            {{ software.title }}
-                                        </a>
-                                        {% else %}
-                                        <span class="text-gray-500">{{ software.title }} (Invalid)</span>
-                                        {% endif %}
-                                    </h3>
-                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs ml-2 flex-shrink-0">v{{ software.version }}</span>
-                                </div>
-                                <p class="text-gray-600 text-xs sm:text-base mb-2 sm:mb-3 line-clamp-2">{{ software.description|truncatewords:20 }}</p>
-                                
-                                <!-- Mobile metadata -->
-                                <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 mb-2 sm:mb-0">
-                                    <span class="flex items-center">
-                                        <i class="fas fa-tag mr-1"></i>
-                                        <span class="truncate">{{ software.category.name|default:"Uncategorized" }}</span>
-                                    </span>
-                                    <span class="flex items-center">
-                                        <i class="fas fa-download mr-1"></i>
-                                        {{ software.download_count }}
-                                    </span>
-                                    <span class="flex items-center">
-                                        <i class="fas fa-calendar mr-1"></i>
-                                        {{ software.upload_date|date:"M d, Y" }}
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <!-- Action Buttons -->
-                            <div class="flex gap-2 sm:ml-4 flex-shrink-0">
+                    <div class="list-info">
+                        <div class="list-header">
+                            <h3 class="list-title">
                                 {% if software.pk %}
-                                <a href="{% url 'software:software_detail' software.pk %}" 
-                                   class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors inline-flex items-center">
-                                    <i class="fas fa-info-circle mr-1 sm:mr-2"></i>
-                                    <span class="hidden sm:inline">Details</span>
-                                    <span class="sm:hidden">Info</span>
-                                </a>
-                                <a href="{% url 'software:software_download' software.pk %}" 
-                                   class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-xs sm:text-sm font-medium transition-colors inline-flex items-center">
-                                    <i class="fas fa-download mr-1 sm:mr-2"></i>
-                                    <span class="hidden sm:inline">Download</span>
-                                    <span class="sm:hidden">Get</span>
+                                <a href="{% url 'software:software_detail' software.pk %}">
+                                    {{ software.title }}
                                 </a>
                                 {% else %}
-                                <span class="bg-gray-300 text-gray-500 px-3 py-2 rounded-md text-xs sm:text-sm font-medium">
-                                    <i class="fas fa-exclamation-triangle mr-1 sm:mr-2"></i>
-                                    <span class="hidden sm:inline">Invalid Software</span>
-                                    <span class="sm:hidden">Invalid</span>
-                                </span>
+                                <span style="color: #9ca3af;">{{ software.title }} (Invalid)</span>
                                 {% endif %}
-                            </div>
+                            </h3>
+                            <span class="version-badge">v{{ software.version }}</span>
+                        </div>
+                        <p class="list-description line-clamp-3">{{ software.description|truncatewords:25 }}</p>
+                        
+                        <!-- Metadata -->
+                        <div class="list-meta">
+                            <span class="meta-item">
+                                <i class="fas fa-tag"></i>
+                                <span class="truncate">{{ software.category.name|default:"Uncategorized" }}</span>
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-download"></i>
+                                {{ software.download_count }}
+                            </span>
+                            <span class="meta-item">
+                                <i class="fas fa-calendar"></i>
+                                {{ software.upload_date|date:"M d, Y" }}
+                            </span>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="list-actions">
+                            {% if software.pk %}
+                            <a href="{% url 'software:software_detail' software.pk %}" class="btn btn-secondary">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="hidden-mobile">Details</span>
+                                <span class="mobile-only">Info</span>
+                            </a>
+                            <a href="{% url 'software:software_download' software.pk %}" class="btn btn-primary">
+                                <i class="fas fa-download"></i>
+                                <span class="hidden-mobile">Download</span>
+                                <span class="mobile-only">Get</span>
+                            </a>
+                            {% else %}
+                            <span class="btn btn-disabled">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span class="hidden-mobile">Invalid Software</span>
+                                <span class="mobile-only">Invalid</span>
+                            </span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-            </div>
+            </article>
             {% empty %}
-            <div class="text-center py-8 sm:py-12">
-                <i class="fas fa-search text-gray-300 text-4xl sm:text-6xl mb-4"></i>
-                <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">No software found</h3>
-                <p class="text-sm sm:text-base text-gray-500">Try adjusting your search or filter criteria.</p>
+            <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h3>No software found</h3>
+                <p>Try adjusting your search or filter criteria.</p>
             </div>
             {% endfor %}
         </div>
 
         <!-- Pagination -->
         {% if page_obj.has_other_pages %}
-        <div class="mt-6 sm:mt-8">
+        <nav class="pagination" aria-label="Pagination">
             <!-- Mobile Pagination -->
-            <div class="flex justify-between sm:hidden">
+            <div class="pagination-mobile">
                 {% if page_obj.has_previous %}
                     <a href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
-                       class="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        <i class="fas fa-chevron-left mr-1"></i>
+                       class="pagination-link" aria-label="Previous page">
+                        <i class="fas fa-chevron-left"></i>
                         Previous
                     </a>
                 {% else %}
-                    <span class="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-400 bg-gray-100">
-                        <i class="fas fa-chevron-left mr-1"></i>
+                    <span class="pagination-link disabled" aria-label="Previous page (disabled)">
+                        <i class="fas fa-chevron-left"></i>
                         Previous
                     </span>
                 {% endif %}
                 
-                <span class="relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700">
+                <span class="pagination-info" aria-live="polite">
                     {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
                 </span>
                 
                 {% if page_obj.has_next %}
                     <a href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
-                       class="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                       class="pagination-link" aria-label="Next page">
                         Next
-                        <i class="fas fa-chevron-right ml-1"></i>
+                        <i class="fas fa-chevron-right"></i>
                     </a>
                 {% else %}
-                    <span class="relative inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-400 bg-gray-100">
+                    <span class="pagination-link disabled" aria-label="Next page (disabled)">
                         Next
-                        <i class="fas fa-chevron-right ml-1"></i>
+                        <i class="fas fa-chevron-right"></i>
                     </span>
                 {% endif %}
             </div>
             
             <!-- Desktop Pagination -->
-            <div class="hidden sm:flex sm:items-center sm:justify-between">
-                <div>
-                    <p class="text-sm text-gray-700">
-                        Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                    </p>
+            <div class="pagination-desktop">
+                <div class="pagination-info" aria-live="polite">
+                    Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
                 </div>
-                <div>
-                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                        {% if page_obj.has_previous %}
-                            <a href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
-                               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <i class="fas fa-chevron-left"></i>
+                <div class="pagination-nav">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
+                           class="pagination-link" aria-label="Previous page">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <span class="pagination-link active" aria-current="page" aria-label="Current page {{ num }}">
+                                {{ num }}
+                            </span>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?page={{ num }}&search={{ search_query }}&category={{ selected_category }}" 
+                               class="pagination-link" aria-label="Go to page {{ num }}">
+                                {{ num }}
                             </a>
                         {% endif %}
-                        
-                        {% for num in page_obj.paginator.page_range %}
-                            {% if page_obj.number == num %}
-                                <span class="relative inline-flex items-center px-4 py-2 border border-blue-500 bg-blue-50 text-sm font-medium text-blue-600">
-                                    {{ num }}
-                                </span>
-                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                <a href="?page={{ num }}&search={{ search_query }}&category={{ selected_category }}" 
-                                   class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                    {{ num }}
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                        
-                        {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
-                               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                        {% endif %}
-                    </nav>
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&category={{ selected_category }}" 
+                           class="pagination-link" aria-label="Next page">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
-        </div>
+        </nav>
         {% endif %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t mt-8 sm:mt-16">
-        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
-            <div class="text-center text-gray-500">
-                <p class="text-sm sm:text-base">&copy; {% now "Y" %} Software Portal by Tanvir. All rights reserved.</p>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; {% now "Y" %} Software Portal by Tanvir. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script>
+        <script>
+        // View mode management
+        let currentViewMode = window.innerWidth < 640 ? 'list' : 'grid';
+
+        function setViewMode(mode, button) {
+            currentViewMode = mode;
+            
+            // Update button states
+            const buttons = document.querySelectorAll('.view-toggle-button');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            button.classList.add('active');
+            button.setAttribute('aria-pressed', 'true');
+            
+            // Update view visibility
+            const gridView = document.getElementById('gridView');
+            const listView = document.getElementById('listView');
+            
+            if (mode === 'grid') {
+                gridView.classList.add('active');
+                listView.classList.remove('active');
+            } else {
+                gridView.classList.remove('active');
+                listView.classList.add('active');
+            }
+            
+            // Save preference
+            try {
+                localStorage.setItem('viewMode', mode);
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
+        }
+
+        // Dropdown management
+        function toggleDropdown(button) {
+            const dropdown = button.nextElementSibling;
+            if (!dropdown) return;
+            
+            const isHidden = dropdown.classList.contains('hidden');
+            
+            // Close all dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.add('hidden');
+            });
+            document.querySelectorAll('.dropdown-button').forEach(btn => {
+                btn.setAttribute('aria-expanded', 'false');
+            });
+            
+            // Toggle current dropdown
+            if (isHidden) {
+                dropdown.classList.remove('hidden');
+                button.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.add('hidden');
+                });
+                document.querySelectorAll('.dropdown-button').forEach(btn => {
+                    btn.setAttribute('aria-expanded', 'false');
+                });
+            }
+        });
+
+        // Handle escape key for dropdowns
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.add('hidden');
+                });
+                document.querySelectorAll('.dropdown-button').forEach(btn => {
+                    btn.setAttribute('aria-expanded', 'false');
+                });
+            }
+        });
+
+        // Copy to clipboard function
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(function() {
-                alert('Link copied to clipboard!');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    showNotification('Link copied to clipboard!');
+                }).catch(function(err) {
+                    console.error('Failed to copy text: ', err);
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        // Fallback copy function for older browsers
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showNotification('Link copied to clipboard!');
+                } else {
+                    showNotification('Failed to copy link');
+                }
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+                showNotification('Copy not supported');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Simple notification function
+        function showNotification(message) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #2563eb;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 1000;
+                font-size: 14px;
+                font-weight: 500;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize view mode on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const gridView = document.getElementById('gridView');
+            const listView = document.getElementById('listView');
+            
+            if (!gridView || !listView) {
+                console.warn('Grid or list view elements not found');
+                return;
+            }
+            
+            // Load saved preference
+            let savedViewMode = null;
+            try {
+                savedViewMode = localStorage.getItem('viewMode');
+            } catch (e) {
+                console.warn('localStorage not available:', e);
+            }
+            
+            if (savedViewMode && window.innerWidth >= 640) {
+                currentViewMode = savedViewMode;
+                
+                // Update button states
+                document.querySelectorAll('.view-toggle-button').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-pressed', 'false');
+                });
+                
+                const activeButton = document.querySelector(`[onclick*="${currentViewMode}"]`);
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                    activeButton.setAttribute('aria-pressed', 'true');
+                }
+            }
+            
+            // Apply view mode
+            if (currentViewMode === 'grid') {
+                gridView.classList.add('active');
+                listView.classList.remove('active');
+            } else {
+                gridView.classList.remove('active');
+                listView.classList.add('active');
+            }
+            
+            // Initialize ARIA attributes
+            document.querySelectorAll('.dropdown-button').forEach(btn => {
+                btn.setAttribute('aria-expanded', 'false');
+                btn.setAttribute('aria-haspopup', 'true');
+            });
+            
+            document.querySelectorAll('.view-toggle-button').forEach((btn, index) => {
+                btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
+            });
+        });
+
+        // Handle responsive view mode changes
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const gridView = document.getElementById('gridView');
+                const listView = document.getElementById('listView');
+                
+                if (!gridView || !listView) return;
+                
+                if (window.innerWidth < 640) {
+                    currentViewMode = 'list';
+                    gridView.classList.remove('active');
+                    listView.classList.add('active');
+                } else {
+                    // Restore saved preference on larger screens
+                    let savedViewMode = 'grid';
+                    try {
+                        savedViewMode = localStorage.getItem('viewMode') || 'grid';
+                    } catch (e) {
+                        console.warn('localStorage not available:', e);
+                    }
+                    
+                    if (savedViewMode !== currentViewMode) {
+                        const button = document.querySelector(`[onclick*="${savedViewMode}"]`);
+                        if (button) {
+                            setViewMode(savedViewMode, button);
+                        }
+                    }
+                }
+            }, 150);
+        });
+
+        // Lazy loading for images (if IntersectionObserver is supported)
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                            img.classList.add('loaded');
+                            observer.unobserve(img);
+                        }
+                    }
+                });
+            }, {
+                rootMargin: '50px 0px',
+                threshold: 0.01
+            });
+
+            // Observe all images with data-src attribute
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+
+        // Performance optimization: Debounce search input
+        const searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+            let searchTimeout;
+            searchInput.addEventListener('input', function(e) {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    // Auto-submit search after 500ms of no typing
+                    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+                        const form = e.target.closest('form');
+                        if (form) {
+                            form.submit();
+                        }
+                    }
+                }, 500);
+            });
+        }
+
+        // Handle image loading errors
+        document.addEventListener('error', function(e) {
+            if (e.target.tagName === 'IMG') {
+                const img = e.target;
+                const placeholder = img.closest('.card-thumbnail, .list-thumbnail');
+                if (placeholder) {
+                    img.style.display = 'none';
+                    const placeholderDiv = placeholder.querySelector('.card-thumbnail-placeholder, .list-thumbnail-placeholder');
+                    if (placeholderDiv) {
+                        placeholderDiv.style.display = 'flex';
+                    }
+                }
+            }
+        }, true);
+
+        // Smooth scroll for pagination links
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.pagination-link') && !e.target.closest('.pagination-link').classList.contains('disabled')) {
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+            }
+        });
+
+        // Add loading states for buttons
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-primary');
+            if (btn && !btn.classList.contains('btn-disabled')) {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                btn.style.pointerEvents = 'none';
+                
+                // Reset after 3 seconds (fallback)
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.pointerEvents = 'auto';
+                }, 3000);
+            }
+        });
+
+        // Keyboard navigation for dropdowns
+        document.addEventListener('keydown', function(e) {
+            const activeDropdown = document.querySelector('.dropdown-menu:not(.hidden)');
+            if (activeDropdown && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+                e.preventDefault();
+                const items = activeDropdown.querySelectorAll('.dropdown-item');
+                const currentIndex = Array.from(items).findIndex(item => item === document.activeElement);
+                
+                let nextIndex;
+                if (e.key === 'ArrowDown') {
+                    nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+                } else {
+                    nextIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+                }
+                
+                items[nextIndex].focus();
+            }
+        });
+
+        // Add touch support for mobile devices
+        if ('ontouchstart' in window) {
+            document.addEventListener('touchstart', function() {
+                // Enable :hover styles on touch devices
+                document.body.classList.add('touch-device');
+            });
+        }
+
+        // Performance monitoring (optional)
+        if ('performance' in window && 'measure' in window.performance) {
+            window.addEventListener('load', function() {
+                setTimeout(() => {
+                    const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                    console.log('Page load time:', loadTime + 'ms');
+                }, 0);
             });
         }
     </script>

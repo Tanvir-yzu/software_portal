@@ -139,345 +139,1004 @@
     <link rel="icon" type="image/x-icon" href="{% static 'icon/favicon.ico' %}">
     <link rel="apple-touch-icon" href="{% static 'icon/favicon.ico' %}">
     
-    <!-- Preconnect for Performance -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="preconnect" href="https://unpkg.com">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    
-    <!-- CSS and JavaScript -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3B82F6',
-                        secondary: '#1E40AF',
-                    }
-                }
+    
+    <!-- Custom CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+            padding: 0 1rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .nav-brand i {
+            font-size: 1.5rem;
+            color: #3B82F6;
+            margin-right: 0.75rem;
+        }
+
+        .nav-brand span {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: #6b7280;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #3B82F6;
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 1rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb ol {
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        .breadcrumb li {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb a {
+            color: #374151;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: #3B82F6;
+        }
+
+        .breadcrumb .separator {
+            color: #9ca3af;
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb .current {
+            color: #6b7280;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 2.25rem;
+            font-weight: bold;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-blue {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-purple {
+            background-color: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .badge-green {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-gray {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+
+        .badge i {
+            margin-right: 0.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #059669, #10b981);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #047857, #059669);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+        .btn i {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: 1fr;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .section-title i {
+            margin-right: 0.75rem;
+            color: #3B82F6;
+        }
+
+        /* Image Styles */
+        .image-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background-color: #e5e7eb;
+            color: #6b7280;
+            border-radius: 0.5rem;
+        }
+
+        .image-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .software-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Description */
+        .description {
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .description p {
+            color: #374151;
+            line-height: 1.75;
+        }
+
+        .read-more-btn {
+            margin-top: 1rem;
+            color: #3B82F6;
+            background: none;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .read-more-btn:hover {
+            color: #1e40af;
+        }
+
+        /* File Information */
+        .file-info {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .file-info .section-title i {
+            color: #2563eb;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 0.5rem;
+        }
+
+        .info-label {
+            color: #6b7280;
+        }
+
+        .info-value {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border: 1px solid;
+        }
+
+        .download-card {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            border-color: #bbf7d0;
+        }
+
+        .download-stats {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .download-count {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #059669;
+            margin-bottom: 0.25rem;
+        }
+
+        .download-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .category-card {
+            background-color: #faf5ff;
+            border-color: #d8b4fe;
+        }
+
+        .category-card .section-title i {
+            color: #7c3aed;
+        }
+
+        .category-link {
+            display: inline-flex;
+            align-items: center;
+            color: #7c3aed;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .category-link:hover {
+            color: #6d28d9;
+        }
+
+        .category-link i {
+            margin-left: 0.5rem;
+        }
+
+        .uploader-card {
+            background-color: #f9fafb;
+            border-color: #e5e7eb;
+        }
+
+        .uploader-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .uploader-avatar {
+            width: 3rem;
+            height: 3rem;
+            background-color: #3B82F6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+
+        .uploader-details .name {
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .uploader-details .role {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .share-card {
+            background-color: #fff7ed;
+            border-color: #fed7aa;
+        }
+
+        .share-card .section-title i {
+            color: #ea580c;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .share-btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .share-btn-primary {
+            background-color: #ea580c;
+            color: white;
+        }
+
+        .share-btn-primary:hover {
+            background-color: #c2410c;
+        }
+
+        .share-btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .share-btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+        /* Related Software */
+        .related-section {
+            margin-top: 3rem;
+        }
+
+        .related-placeholder {
+            text-align: center;
+            color: #6b7280;
+            padding: 2rem;
+        }
+
+        .related-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .related-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 1rem;
+            color: #3B82F6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .related-link:hover {
+            color: #1e40af;
+        }
+
+        .related-link i {
+            margin-left: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #1f2937;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .nav-content {
+                padding: 0 1.5rem;
+            }
+
+            .main-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .grid-md-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .breadcrumb li + li {
+                margin-left: 0.75rem;
             }
         }
-    </script>
+
+        @media (min-width: 1024px) {
+            .container {
+                padding: 0 2rem;
+            }
+
+            .nav-content {
+                padding: 0 2rem;
+            }
+
+            .main-content {
+                padding: 2rem;
+            }
+
+            .grid-lg-3 {
+                grid-template-columns: 2fr 1fr;
+            }
+
+            .card-header {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+
+            .card-content {
+                flex: 1;
+            }
+
+            .card-action {
+                margin-left: 2rem;
+                margin-top: 1.5rem;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem;
+        }
+
+        .mr-3 {
+            margin-right: 0.75rem;
+        }
+
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+
+        /* Animation */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Alpine.js replacement with vanilla JS */
+        .description-short {
+            position: relative;
+        }
+
+        .description-short::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2rem;
+            background: linear-gradient(to top, #f9fafb, transparent);
+        }
+
+        .description-full {
+            white-space: pre-line;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen" x-data="{ showFullDescription: false, imageLoaded: false }">
+<body>
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <a href="{% url 'software:software_list' %}" class="flex items-center space-x-3">
-                        <i class="fas fa-cube text-2xl text-primary"></i>
-                        <span class="text-xl font-bold text-gray-800">Software Portal</span>
-                    </a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="{% url 'software:software_list' %}" 
-                       class="text-gray-600 hover:text-primary transition-colors flex items-center">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Back to Software List
-                    </a>
-                </div>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="{% url 'software:software_list' %}" class="nav-brand">
+                    <i class="fas fa-cube"></i>
+                    <span>Software Portal</span>
+                </a>
+                <a href="{% url 'software:software_list' %}" class="nav-link">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Software List
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Breadcrumb -->
-        <nav class="flex mb-8" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                <li class="inline-flex items-center">
-                    <a href="{% url 'software:software_list' %}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-primary">
-                        <i class="fas fa-home mr-2"></i>
-                        Home
-                    </a>
-                </li>
-                <li>
-                    <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                        <a href="{% url 'software:software_list' %}" class="ml-1 text-sm font-medium text-gray-700 hover:text-primary md:ml-2">Software</a>
-                    </div>
-                </li>
-                {% if software.category %}
-                <li>
-                    <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                        <a href="{% url 'software:software_list' %}?category={{ software.category.pk }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-primary md:ml-2">{{ software.category.name }}</a>
-                    </div>
-                </li>
-                {% endif %}
-                <li aria-current="page">
-                    <div class="flex items-center">
-                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">{{ software.title }}</span>
-                    </div>
-                </li>
-            </ol>
-        </nav>
+    <div class="container">
+        <div class="main-content">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <ol>
+                    <li>
+                        <a href="{% url 'software:software_list' %}">
+                            <i class="fas fa-home mr-2"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <i class="fas fa-chevron-right separator"></i>
+                        <a href="{% url 'software:software_list' %}">Software</a>
+                    </li>
+                    {% if software.category %}
+                    <li>
+                        <i class="fas fa-chevron-right separator"></i>
+                        <a href="{% url 'software:software_list' %}?category={{ software.category.pk }}">{{ software.category.name }}</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <i class="fas fa-chevron-right separator"></i>
+                        <span class="current">{{ software.title }}</span>
+                    </li>
+                </ol>
+            </nav>
 
-        <!-- Software Header -->
-        <div class="bg-white rounded-lg shadow-md p-8 mb-8">
-            <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between">
-                <div class="flex-1">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ software.title }}</h1>
-                    <div class="flex flex-wrap items-center gap-4 mb-6">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                            <i class="fas fa-tag mr-2"></i>
-                            Version {{ software.version }}
-                        </span>
-                        {% if software.category %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-                            <i class="fas fa-folder mr-2"></i>
-                            {{ software.category.name }}
-                        </span>
-                        {% endif %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                            <i class="fas fa-download mr-2"></i>
-                            {{ software.download_count }} downloads
-                        </span>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-                            <i class="fas fa-calendar mr-2"></i>
-                            {{ software.upload_date|date:"M d, Y" }}
-                        </span>
+            <!-- Software Header -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-content">
+                        <h1 class="card-title">{{ software.title }}</h1>
+                        <div class="card-meta">
+                            <span class="badge badge-blue">
+                                <i class="fas fa-tag"></i>
+                                Version {{ software.version }}
+                            </span>
+                            {% if software.category %}
+                            <span class="badge badge-purple">
+                                <i class="fas fa-folder"></i>
+                                {{ software.category.name }}
+                            </span>
+                            {% endif %}
+                            <span class="badge badge-green">
+                                <i class="fas fa-download"></i>
+                                {{ software.download_count }} downloads
+                            </span>
+                            <span class="badge badge-gray">
+                                <i class="fas fa-calendar"></i>
+                                {{ software.upload_date|date:"M d, Y" }}
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div class="lg:ml-8 mt-6 lg:mt-0">
-                    <a href="{% url 'software:software_download' software.pk %}" 
-                       class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                        <i class="fas fa-download mr-3 text-xl"></i>
-                        Download Now
-                    </a>
+                    <div class="card-action">
+                        <a href="{% url 'software:software_download' software.pk %}" class="btn btn-primary">
+                            <i class="fas fa-download"></i>
+                            Download Now
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Main Content -->
-            <div class="lg:col-span-2 space-y-8">
-                <!-- Thumbnail -->
-                {% if software.thumbnail %}
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-image mr-3 text-primary"></i>
-                        Preview
-                    </h2>
-                    <div class="relative">
-                        <div x-show="!imageLoaded" class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
-                            <div class="animate-pulse flex items-center justify-center w-full h-full">
-                                <i class="fas fa-image text-4xl text-gray-400"></i>
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 grid-lg-3">
+                <!-- Main Content -->
+                <div>
+                    <!-- Thumbnail -->
+                    {% if software.thumbnail %}
+                    <div class="section">
+                        <h2 class="section-title">
+                            <i class="fas fa-image"></i>
+                            Preview
+                        </h2>
+                        <div class="image-container">
+                            <div id="image-loading" class="image-placeholder animate-pulse">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <img src="{{ software.thumbnail.url }}" 
+                                 alt="{{ software.title }} thumbnail"
+                                 class="software-image hidden"
+                                 id="software-image"
+                                 onload="showImage()"
+                                 onerror="showImageError()">
+                            <div id="image-error" class="image-placeholder hidden">
+                                <div class="text-center">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <p>Image not available</p>
+                                    <p style="font-size: 0.875rem;">{{ software.thumbnail.url }}</p>
+                                </div>
                             </div>
                         </div>
-                        <img src="{{ software.thumbnail.url }}" 
-                             alt="{{ software.title }} thumbnail"
-                             class="w-full aspect-video object-cover rounded-lg shadow-md"
-                             x-show="imageLoaded"
-                             @load="imageLoaded = true"
-                             @error="imageLoaded = true; console.error('Failed to load image:', '{{ software.thumbnail.url }}');"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <div class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center text-gray-500" style="display: none;">
+                    </div>
+                    {% else %}
+                    <div class="section">
+                        <h2 class="section-title">
+                            <i class="fas fa-image"></i>
+                            Preview
+                        </h2>
+                        <div class="image-placeholder">
                             <div class="text-center">
-                                <i class="fas fa-exclamation-triangle text-4xl mb-2"></i>
-                                <p>Image not available</p>
-                                <p class="text-sm">{{ software.thumbnail.url }}</p>
+                                <i class="fas fa-image"></i>
+                                <p>No preview available</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                {% else %}
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-image mr-3 text-primary"></i>
-                        Preview
-                    </h2>
-                    <div class="w-full aspect-video bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
-                        <div class="text-center">
-                            <i class="fas fa-image text-4xl mb-2"></i>
-                            <p>No preview available</p>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
+                    {% endif %}
 
-                <!-- Description -->
-                <div class="bg-gray-50 rounded-lg p-6">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-info-circle mr-3 text-primary"></i>
-                        Description
-                    </h2>
-                    <div class="prose prose-gray max-w-none">
-                        <div x-show="!showFullDescription" class="relative">
-                            <p class="text-gray-700 leading-relaxed">
-                                {{ software.description|truncatewords:50 }}
-                            </p>
-                            {% if software.description|length > 300 %}
-                            <div class="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-gray-50 to-transparent"></div>
-                            {% endif %}
+                    <!-- Description -->
+                    <div class="description">
+                        <h2 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Description
+                        </h2>
+                        <div id="description-short" class="description-short">
+                            <p>{{ software.description|truncatewords:50 }}</p>
                         </div>
-                        <div x-show="showFullDescription">
-                            <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ software.description }}</p>
+                        <div id="description-full" class="description-full hidden">
+                            <p>{{ software.description }}</p>
                         </div>
                         {% if software.description|length > 300 %}
-                        <button @click="showFullDescription = !showFullDescription" 
-                                class="mt-4 text-primary hover:text-secondary font-medium transition-colors">
-                            <span x-show="!showFullDescription">Read More <i class="fas fa-chevron-down ml-1"></i></span>
-                            <span x-show="showFullDescription">Read Less <i class="fas fa-chevron-up ml-1"></i></span>
+                        <button id="read-more-btn" class="read-more-btn" onclick="toggleDescription()">
+                            Read More <i class="fas fa-chevron-down ml-2"></i>
                         </button>
                         {% endif %}
                     </div>
-                </div>
 
-                <!-- File Information -->
-                <div class="bg-blue-50 rounded-lg p-6 border border-blue-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-file-alt mr-3 text-blue-600"></i>
-                        File Information
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="flex items-center justify-between p-3 bg-white rounded-lg">
-                            <span class="text-gray-600">File Name:</span>
-                            <span class="font-medium text-gray-800">{{ software.file.name|default:"N/A" }}</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-white rounded-lg">
-                            <span class="text-gray-600">Version:</span>
-                            <span class="font-medium text-gray-800">{{ software.version }}</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-white rounded-lg">
-                            <span class="text-gray-600">Upload Date:</span>
-                            <span class="font-medium text-gray-800">{{ software.upload_date|date:"M d, Y" }}</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-white rounded-lg">
-                            <span class="text-gray-600">Last Updated:</span>
-                            <span class="font-medium text-gray-800">{{ software.updated_at|date:"M d, Y" }}</span>
+                    <!-- File Information -->
+                    <div class="file-info">
+                        <h3 class="section-title">
+                            <i class="fas fa-file-alt"></i>
+                            File Information
+                        </h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">File Name:</span>
+                                <span class="info-value">{{ software.file.name|default:"N/A" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Version:</span>
+                                <span class="info-value">{{ software.version }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Upload Date:</span>
+                                <span class="info-value">{{ software.upload_date|date:"M d, Y" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Last Updated:</span>
+                                <span class="info-value">{{ software.updated_at|date:"M d, Y" }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-6">
-                <!-- Download Card -->
-                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-6 border border-green-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-download mr-3 text-green-600"></i>
-                        Download
-                    </h3>
-                    <div class="space-y-4">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-green-600 mb-1">{{ software.download_count }}</div>
-                            <div class="text-sm text-gray-600">Total Downloads</div>
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Download Card -->
+                    <div class="sidebar-card download-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-download"></i>
+                            Download
+                        </h3>
+                        <div class="download-stats">
+                            <div class="download-count">{{ software.download_count }}</div>
+                            <div class="download-label">Total Downloads</div>
                         </div>
-                        <a href="{% url 'software:software_download' software.pk %}" 
-                           class="w-full inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-1">
-                            <i class="fas fa-download mr-3"></i>
+                        <a href="{% url 'software:software_download' software.pk %}" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-download"></i>
                             Download Now
                         </a>
-                        <p class="text-xs text-gray-500 text-center">
+                        <p class="text-center" style="font-size: 0.75rem; color: #6b7280; margin-top: 1rem;">
                             Free download • No registration required
                         </p>
                     </div>
-                </div>
 
-                <!-- Category Card -->
-                {% if software.category %}
-                <div class="bg-purple-50 rounded-lg p-6 border border-purple-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-folder mr-3 text-purple-600"></i>
-                        Category
-                    </h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="font-medium text-gray-800">{{ software.category.name }}</span>
-                        </div>
-                        {% if software.category.description %}
-                        <p class="text-sm text-gray-600">{{ software.category.description }}</p>
-                        {% endif %}
-                        <a href="{% url 'software:software_list' %}?category={{ software.category.pk }}" 
-                           class="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium text-sm transition-colors">
-                            View more in this category
-                            <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                {% endif %}
-
-                <!-- Uploader Info -->
-                {% if software.uploader %}
-                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-user mr-3 text-gray-600"></i>
-                        Uploader
-                    </h3>
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg">
-                            {{ software.uploader.username|first|upper }}
-                        </div>
+                    <!-- Category Card -->
+                    {% if software.category %}
+                    <div class="sidebar-card category-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-folder"></i>
+                            Category
+                        </h3>
                         <div>
-                            <div class="font-medium text-gray-800">{{ software.uploader.username }}</div>
-                            <div class="text-sm text-gray-600">
-                                {% if software.uploader.first_name %}
-                                    {{ software.uploader.first_name }} {{ software.uploader.last_name }}
-                                {% else %}
-                                    Software Contributor
-                                {% endif %}
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                                <span style="font-weight: 500; color: #1f2937;">{{ software.category.name }}</span>
+                            </div>
+                            {% if software.category.description %}
+                            <p style="font-size: 0.875rem; color: #6b7280; margin-bottom: 0.75rem;">{{ software.category.description }}</p>
+                            {% endif %}
+                            <a href="{% url 'software:software_list' %}?category={{ software.category.pk }}" class="category-link">
+                                View more in this category
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Uploader Info -->
+                    {% if software.uploader %}
+                    <div class="sidebar-card uploader-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-user"></i>
+                            Uploader
+                        </h3>
+                        <div class="uploader-info">
+                            <div class="uploader-avatar">
+                                {{ software.uploader.username|first|upper }}
+                            </div>
+                            <div class="uploader-details">
+                                <div class="name">{{ software.uploader.username }}</div>
+                                <div class="role">
+                                    {% if software.uploader.first_name %}
+                                        {{ software.uploader.first_name }} {{ software.uploader.last_name }}
+                                    {% else %}
+                                        Software Contributor
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {% endif %}
+                    {% endif %}
 
-                <!-- Share Card -->
-                <div class="bg-orange-50 rounded-lg p-6 border border-orange-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-share-alt mr-3 text-orange-600"></i>
-                        Share
-                    </h3>
-                    <div class="flex space-x-3">
-                        <button onclick="navigator.share ? navigator.share({title: '{{ software.title }}', url: window.location.href}) : copyToClipboard(window.location.href)" 
-                                class="flex-1 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors text-sm font-medium">
-                            <i class="fas fa-share mr-2"></i>Share
-                        </button>
-                        <button onclick="copyToClipboard(window.location.href)" 
-                                class="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium">
-                            <i class="fas fa-copy mr-2"></i>Copy Link
-                        </button>
+                    <!-- Share Card -->
+                    <div class="sidebar-card share-card">
+                        <h3 class="section-title">
+                            <i class="fas fa-share-alt"></i>
+                            Share
+                        </h3>
+                        <div class="share-buttons">
+                            <button onclick="shareContent()" class="share-btn share-btn-primary">
+                                <i class="fas fa-share mr-2"></i>Share
+                            </button>
+                            <button onclick="copyToClipboard(window.location.href)" class="share-btn share-btn-secondary">
+                                <i class="fas fa-copy mr-2"></i>Copy Link
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Related Software Section -->
-        <div class="mt-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <i class="fas fa-th-large mr-3 text-primary"></i>
-                Related Software
-            </h2>
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="text-center text-gray-500 py-8">
-                    <i class="fas fa-search text-4xl mb-4"></i>
-                    <p>Related software will be displayed here</p>
-                    <a href="{% url 'software:software_list' %}" class="inline-flex items-center mt-4 text-primary hover:text-secondary font-medium">
-                        Browse All Software
-                        <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
+            <!-- Related Software Section -->
+            <div class="related-section">
+                <h2 class="section-title">
+                    <i class="fas fa-th-large"></i>
+                    Related Software
+                </h2>
+                <div class="section">
+                    <div class="related-placeholder">
+                        <i class="fas fa-search"></i>
+                        <p>Related software will be displayed here</p>
+                        <a href="{% url 'software:software_list' %}" class="related-link">
+                            Browse All Software
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <footer class="footer">
+        <div class="container">
             <p>&copy; {% now "Y" %} Software Portal by Tanvir. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
+        // Image loading functions
+        function showImage() {
+            document.getElementById('image-loading').classList.add('hidden');
+            document.getElementById('software-image').classList.remove('hidden');
+        }
+
+        function showImageError() {
+            document.getElementById('image-loading').classList.add('hidden');
+            document.getElementById('image-error').classList.remove('hidden');
+            console.error('Failed to load image:', '{{ software.thumbnail.url }}');
+        }
+
+        // Description toggle
+        let isDescriptionExpanded = false;
+        
+        function toggleDescription() {
+            const shortDesc = document.getElementById('description-short');
+            const fullDesc = document.getElementById('description-full');
+            const btn = document.getElementById('read-more-btn');
+            
+            if (isDescriptionExpanded) {
+                shortDesc.classList.remove('hidden');
+                fullDesc.classList.add('hidden');
+                btn.innerHTML = 'Read More <i class="fas fa-chevron-down ml-2"></i>';
+                isDescriptionExpanded = false;
+            } else {
+                shortDesc.classList.add('hidden');
+                fullDesc.classList.remove('hidden');
+                btn.innerHTML = 'Read Less <i class="fas fa-chevron-up ml-2"></i>';
+                isDescriptionExpanded = true;
+            }
+        }
+
+        // Share functionality
+        function shareContent() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ software.title }}',
+                    url: window.location.href
+                });
+            } else {
+                copyToClipboard(window.location.href);
+            }
+        }
+
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function() {
-                // You could add a toast notification here
                 alert('Link copied to clipboard!');
             }, function(err) {
                 console.error('Could not copy text: ', err);
