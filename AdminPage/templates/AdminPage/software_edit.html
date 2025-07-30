@@ -1,0 +1,216 @@
+{% extends 'base_admin.html' %}
+{% load static %}
+
+{% block title %}Edit Software - Admin Panel{% endblock %}
+
+{% block extra_css %}
+<style>
+    .upload-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .file-upload-area {
+        border: 2px dashed #d1d5db;
+        border-radius: 8px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .file-upload-area:hover {
+        border-color: #3b82f6;
+        background-color: #f8fafc;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+    }
+    
+    .required {
+        color: #ef4444;
+    }
+    
+    .help-text {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-top: 0.25rem;
+    }
+    
+    .preview-image {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+    
+    .current-file {
+        background-color: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 0.75rem;
+        margin-top: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <!-- Page Header -->
+    <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 flex items-center">
+                    <i class="fas fa-edit text-blue-500 mr-3"></i>
+                    Edit Software
+                </h1>
+                <p class="text-gray-600 mt-1">Update software information</p>
+            </div>
+            <div class="flex space-x-3">
+                <a href="{% url 'adminpage:software_list' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="bg-white shadow-lg rounded-lg border border-gray-200 p-6">
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Basic Information -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-group">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">
+                            Title <span class="required">*</span>
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.title.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.version.id_for_label }}" class="form-label">
+                            Version <span class="required">*</span>
+                        </label>
+                        {{ form.version }}
+                        {% if form.version.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.version.errors.0 }}</div>
+                        {% endif %}
+                        <p class="help-text">e.g., 1.0.0, 2.1.3, etc.</p>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.category.id_for_label }}" class="form-label">
+                        Category <span class="required">*</span>
+                    </label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.category.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">
+                        Description <span class="required">*</span>
+                    </label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.description.errors.0 }}</div>
+                    {% endif %}
+                    <p class="help-text">Provide a detailed description of the software</p>
+                </div>
+            </div>
+            
+            <!-- File Updates -->
+            <div class="border-b border-gray-200 pb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Files</h3>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Software File -->
+                    <div class="form-group">
+                        <label for="{{ form.file.id_for_label }}" class="form-label">
+                            Software File
+                        </label>
+                        
+                        {% if object.file %}
+                        <div class="current-file">
+                            <div class="flex items-center">
+                                <i class="fas fa-file text-blue-500 mr-2"></i>
+                                <span class="text-sm text-gray-700">{{ object.file.name|slice:"20:" }}</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Current file - leave empty to keep unchanged</p>
+                        </div>
+                        {% endif %}
+                        
+                        {{ form.file }}
+                        {% if form.file.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.file.errors.0 }}</div>
+                        {% endif %}
+                        <p class="help-text">Upload a new file to replace the current one</p>
+                    </div>
+                    
+                    <!-- Thumbnail -->
+                    <div class="form-group">
+                        <label for="{{ form.thumbnail.id_for_label }}" class="form-label">
+                            Thumbnail
+                        </label>
+                        
+                        {% if object.thumbnail %}
+                        <div class="current-file">
+                            <img src="{{ object.thumbnail.url }}" alt="Current thumbnail" class="h-20 w-20 object-cover rounded mb-2">
+                            <p class="text-xs text-gray-500">Current thumbnail - upload new to replace</p>
+                        </div>
+                        {% endif %}
+                        
+                        {{ form.thumbnail }}
+                        {% if form.thumbnail.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.thumbnail.errors.0 }}</div>
+                        {% endif %}
+                        <p class="help-text">Upload a new thumbnail to replace the current one</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings -->
+            <div class="pb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
+                
+                <div class="form-group">
+                    <label class="flex items-center">
+                        {{ form.is_active }}
+                        <span class="ml-2 text-gray-700">Software is active</span>
+                    </label>
+                    <p class="help-text ml-6">Uncheck to deactivate this software</p>
+                </div>
+            </div>
+            
+            <!-- Submit Buttons -->
+            <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                <a href="{% url 'adminpage:software_list' %}" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors duration-200">
+                    Cancel
+                </a>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors duration-200 flex items-center">
+                    <i class="fas fa-save mr-2"></i>
+                    Update Software
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
