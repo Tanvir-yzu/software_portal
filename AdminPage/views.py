@@ -39,7 +39,7 @@ class SoftwareUploadForm(forms.ModelForm):
             }),
             'file': forms.FileInput(attrs={
                 'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-                'accept': '.exe,.msi,.zip,.rar,.dmg,.pkg,.deb,.rpm,.tar.gz'
+                'accept': '.exe,.msi,.zip,.rar,.dmg,.pkg,.deb,.rpm,.tar.gz,.apk'
             }),
             'thumbnail': forms.FileInput(attrs={
                 'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',

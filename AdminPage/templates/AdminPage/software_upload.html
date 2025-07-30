@@ -64,6 +64,15 @@
         margin-top: 1rem;
     }
     
+    /* Hide default file inputs */
+    input[type="file"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+    }
+    
     /* Loading and Progress Styles */
     .upload-overlay {
         position: fixed;
@@ -82,7 +91,7 @@
         background: white;
         border-radius: 12px;
         padding: 2rem;
-        max-width: 400px;
+        max-width: 450px;
         width: 90%;
         text-align: center;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -90,9 +99,9 @@
     
     .progress-bar {
         width: 100%;
-        height: 8px;
+        height: 10px;
         background-color: #e5e7eb;
-        border-radius: 4px;
+        border-radius: 5px;
         overflow: hidden;
         margin: 1rem 0;
     }
@@ -100,8 +109,8 @@
     .progress-fill {
         height: 100%;
         background: linear-gradient(90deg, #3b82f6, #10b981);
-        border-radius: 4px;
-        transition: width 0.3s ease;
+        border-radius: 5px;
+        transition: width 0.2s ease;
         position: relative;
     }
     
@@ -203,6 +212,76 @@
         font-size: 0.875rem;
         color: #6b7280;
     }
+    
+    .upload-details {
+        background-color: #f9fafb;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-top: 1rem;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .upload-detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    .upload-detail-row:last-child {
+        margin-bottom: 0;
+    }
+    
+    .upload-detail-label {
+        color: #6b7280;
+        font-weight: 500;
+    }
+    
+    .upload-detail-value {
+        color: #374151;
+        font-weight: 600;
+    }
+    
+    .phase-indicator {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+    
+    .phase-preparing {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .phase-uploading {
+        background-color: #dbeafe;
+        color: #1e40af;
+    }
+    
+    .phase-processing {
+        background-color: #e0e7ff;
+        color: #5b21b6;
+    }
+    
+    .phase-completing {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+    
+    .error-message {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #dc2626;
+        padding: 0.75rem;
+        border-radius: 0.375rem;
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+    }
 </style>
 {% endblock %}
 
@@ -216,22 +295,52 @@
                 <i class="fas fa-check-circle bounce-animation"></i>
             </div>
             
+            <!-- Phase Indicator -->
+            <div x-show="uploadProgress < 100" class="phase-indicator" :class="{
+                'phase-preparing': uploadPhase === 'preparing',
+                'phase-uploading': uploadPhase === 'uploading',
+                'phase-processing': uploadPhase === 'processing',
+                'phase-completing': uploadPhase === 'completing'
+            }">
+                <span x-text="getUploadPhaseText()"></span>
+            </div>
+            
             <h3 class="text-lg font-semibold text-gray-900 mb-2" x-text="uploadProgress < 100 ? 'Uploading Software...' : 'Upload Complete!'"></h3>
             
             <div class="progress-bar">
-                <div class="progress-fill" :style="`width: ${uploadProgress}%`"></div>
+                <div class="progress-fill" :style="`width: ${Math.min(uploadProgress, 100)}%`"></div>
             </div>
             
             <div class="upload-stats">
-                <span x-text="`${uploadProgress}%`"></span>
+                <span x-text="`${Math.round(uploadProgress)}%`"></span>
                 <span x-text="uploadTimeDisplay"></span>
             </div>
             
-            <p class="text-sm text-gray-600 mt-2" x-show="uploadProgress < 100">
+            <!-- Enhanced Real-time Stats -->
+            <div x-show="uploadProgress < 100 && uploadProgress > 0" class="upload-details">
+                <div class="upload-detail-row">
+                    <span class="upload-detail-label">Speed:</span>
+                    <span class="upload-detail-value" x-text="formatSpeed(uploadSpeed)"></span>
+                </div>
+                <div class="upload-detail-row">
+                    <span class="upload-detail-label">Uploaded:</span>
+                    <span class="upload-detail-value" x-text="`${formatFileSize(uploadedBytes)} / ${formatFileSize(totalBytes)}`"></span>
+                </div>
+                <div x-show="estimatedTimeRemaining" class="upload-detail-row">
+                    <span class="upload-detail-label">ETA:</span>
+                    <span class="upload-detail-value" x-text="estimatedTimeRemaining"></span>
+                </div>
+                <div class="upload-detail-row">
+                    <span class="upload-detail-label">File:</span>
+                    <span class="upload-detail-value" x-text="selectedFile"></span>
+                </div>
+            </div>
+            
+            <p class="text-sm text-gray-600 mt-3" x-show="uploadProgress < 100">
                 Please don't close this window while uploading...
             </p>
             
-            <p class="text-sm text-green-600 mt-2" x-show="uploadProgress >= 100">
+            <p class="text-sm text-green-600 mt-3" x-show="uploadProgress >= 100">
                 Your software has been uploaded successfully!
             </p>
             
@@ -262,7 +371,7 @@
 
     <!-- Upload Form -->
     <div class="bg-white shadow-lg rounded-lg border border-gray-200 p-6">
-        <form method="post" enctype="multipart/form-data" class="space-y-6" @submit="handleFormSubmit">
+        <form method="post" enctype="multipart/form-data" class="space-y-6" @submit="handleFormSubmit" x-ref="uploadForm">
             {% csrf_token %}
             
             <!-- Basic Information -->
@@ -325,9 +434,9 @@
                             Software File <span class="required">*</span>
                         </label>
                         <div class="file-upload-area" 
-                             @click="$refs.fileInput.click()" 
-                             @dragover.prevent="dragover = true" 
-                             @dragleave.prevent="dragover = false" 
+                             @click="triggerFileInput('file')" 
+                             @dragover.prevent="handleDragOver($event)" 
+                             @dragleave.prevent="handleDragLeave($event)" 
                              @drop.prevent="handleFileDrop($event, 'file')" 
                              :class="{ 'dragover': dragover, 'uploading': isUploading }">
                             <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4" :class="{ 'pulse-animation': dragover }"></i>
@@ -342,6 +451,7 @@
                         {% if form.file.errors %}
                             <div class="text-red-600 text-sm mt-1">{{ form.file.errors.0 }}</div>
                         {% endif %}
+                        <div x-show="fileError" class="error-message" x-text="fileError"></div>
                     </div>
                     
                     <!-- Thumbnail -->
@@ -350,14 +460,14 @@
                             Thumbnail (Optional)
                         </label>
                         <div class="file-upload-area" 
-                             @click="$refs.thumbnailInput.click()" 
-                             @dragover.prevent="dragover = true" 
-                             @dragleave.prevent="dragover = false" 
+                             @click="triggerFileInput('thumbnail')" 
+                             @dragover.prevent="handleDragOver($event)" 
+                             @dragleave.prevent="handleDragLeave($event)" 
                              @drop.prevent="handleFileDrop($event, 'thumbnail')"
                              :class="{ 'dragover': dragover }">
                             <i class="fas fa-image text-4xl text-gray-400 mb-4" :class="{ 'pulse-animation': dragover }"></i>
                             <p class="text-gray-600 mb-2">Click to upload thumbnail</p>
-                            <p class="text-sm text-gray-500">Supported formats: JPG, PNG, GIF</p>
+                            <p class="text-sm text-gray-500">Supported formats: JPG, PNG, GIF (Max 5MB)</p>
                             <img x-show="thumbnailPreview" :src="thumbnailPreview" class="preview-image mx-auto" alt="Thumbnail preview">
                             <div x-show="thumbnailFile && !thumbnailPreview" class="mt-2">
                                 <p class="text-sm text-gray-700 font-medium" x-text="thumbnailFile"></p>
@@ -367,6 +477,7 @@
                         {% if form.thumbnail.errors %}
                             <div class="text-red-600 text-sm mt-1">{{ form.thumbnail.errors.0 }}</div>
                         {% endif %}
+                        <div x-show="thumbnailError" class="error-message" x-text="thumbnailError"></div>
                     </div>
                 </div>
             </div>
@@ -452,21 +563,105 @@ function uploadForm() {
         uploadStartTime: null,
         uploadTimeDisplay: '',
         uploadInterval: null,
+        fileError: '',
+        thumbnailError: '',
+        uploadSpeed: 0,
+        uploadedBytes: 0,
+        totalBytes: 0,
+        estimatedTimeRemaining: '',
+        uploadPhase: 'preparing', // preparing, uploading, processing, completing
+        
+        // File input trigger functions
+        triggerFileInput(type) {
+            if (this.isUploading) return;
+            
+            const inputId = type === 'file' ? 'id_file' : 'id_thumbnail';
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.click();
+            }
+        },
+        
+        // Drag and drop handlers
+        handleDragOver(event) {
+            event.preventDefault();
+            this.dragover = true;
+        },
+        
+        handleDragLeave(event) {
+            event.preventDefault();
+            // Only set dragover to false if we're leaving the drop zone entirely
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+                this.dragover = false;
+            }
+        },
         
         handleFileDrop(event, type) {
+            event.preventDefault();
             this.dragover = false;
+            
             const files = event.dataTransfer.files;
             if (files.length > 0) {
-                const file = files[0];
-                if (type === 'file') {
-                    document.getElementById('id_file').files = files;
-                    this.selectedFile = file.name;
-                    this.fileSize = this.formatFileSize(file.size);
-                } else if (type === 'thumbnail') {
-                    document.getElementById('id_thumbnail').files = files;
-                    this.thumbnailFile = file.name;
-                    this.previewThumbnail(file);
+                this.processFile(files[0], type);
+            }
+        },
+        
+        // File processing
+        processFile(file, type) {
+            if (type === 'file') {
+                this.fileError = '';
+                
+                // Validate file type
+                const allowedExtensions = ['.exe', '.msi', '.zip', '.rar', '.dmg', '.pkg', '.deb', '.rpm', '.tar.gz', '.apk'];
+                const fileName = file.name.toLowerCase();
+                const isValidType = allowedExtensions.some(ext => fileName.endsWith(ext));
+                
+                if (!isValidType) {
+                    this.fileError = 'Invalid file type. Please select a supported software file.';
+                    return;
                 }
+                
+                // Validate file size (max 500MB)
+                const maxSize = 500 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    this.fileError = 'File size too large. Maximum allowed size is 500MB.';
+                    return;
+                }
+                
+                // Set file to input
+                const input = document.getElementById('id_file');
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                input.files = dataTransfer.files;
+                
+                this.selectedFile = file.name;
+                this.fileSize = this.formatFileSize(file.size);
+                this.totalBytes = file.size;
+                
+            } else if (type === 'thumbnail') {
+                this.thumbnailError = '';
+                
+                // Validate image type
+                if (!file.type.startsWith('image/')) {
+                    this.thumbnailError = 'Please select a valid image file (JPG, PNG, GIF).';
+                    return;
+                }
+                
+                // Validate file size (max 5MB)
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    this.thumbnailError = 'Image size too large. Maximum allowed size is 5MB.';
+                    return;
+                }
+                
+                // Set file to input
+                const input = document.getElementById('id_thumbnail');
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                input.files = dataTransfer.files;
+                
+                this.thumbnailFile = file.name;
+                this.previewThumbnail(file);
             }
         },
         
@@ -475,6 +670,9 @@ function uploadForm() {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     this.thumbnailPreview = e.target.result;
+                };
+                reader.onerror = () => {
+                    this.thumbnailError = 'Error reading image file.';
                 };
                 reader.readAsDataURL(file);
             }
@@ -488,93 +686,169 @@ function uploadForm() {
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         },
         
+        formatSpeed(bytesPerSecond) {
+            if (bytesPerSecond === 0) return '0 B/s';
+            const k = 1024;
+            const sizes = ['B/s', 'KB/s', 'MB/s', 'GB/s'];
+            const i = Math.floor(Math.log(bytesPerSecond) / Math.log(k));
+            return parseFloat((bytesPerSecond / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        },
+        
+        formatTime(seconds) {
+            if (seconds < 60) {
+                return `${Math.round(seconds)}s`;
+            } else if (seconds < 3600) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.round(seconds % 60);
+                return `${minutes}m ${remainingSeconds}s`;
+            } else {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                return `${hours}h ${minutes}m`;
+            }
+        },
+        
         updateUploadTime() {
             if (this.uploadStartTime) {
                 const elapsed = (Date.now() - this.uploadStartTime) / 1000;
-                const minutes = Math.floor(elapsed / 60);
-                const seconds = Math.floor(elapsed % 60);
+                this.uploadTimeDisplay = this.formatTime(elapsed);
                 
-                if (minutes > 0) {
-                    this.uploadTimeDisplay = `${minutes}m ${seconds}s`;
-                } else {
-                    this.uploadTimeDisplay = `${seconds}s`;
+                // Calculate upload speed and ETA
+                if (this.uploadedBytes > 0 && elapsed > 0) {
+                    this.uploadSpeed = this.uploadedBytes / elapsed;
+                    const remainingBytes = this.totalBytes - this.uploadedBytes;
+                    const eta = remainingBytes / this.uploadSpeed;
+                    this.estimatedTimeRemaining = eta > 0 ? this.formatTime(eta) : '';
                 }
             }
         },
         
         calculateUploadDuration() {
-            // Calculate realistic upload duration based on file size
             const file = document.getElementById('id_file').files[0];
-            if (!file) return 3000; // Default 3 seconds
+            if (!file) return 5000;
             
             const fileSizeMB = file.size / (1024 * 1024);
-            let baseDuration = 2000; // Base 2 seconds
+            let baseDuration = 3000; // Minimum 3 seconds
             
-            // Add time based on file size (assuming 10MB/second upload speed)
-            const additionalTime = (fileSizeMB / 10) * 1000;
+            // Simulate realistic upload speed based on file size
+            let uploadSpeed;
+            if (fileSizeMB < 1) {
+                uploadSpeed = 20; // 20 MB/s for small files
+            } else if (fileSizeMB < 10) {
+                uploadSpeed = 15; // 15 MB/s for medium files
+            } else if (fileSizeMB < 50) {
+                uploadSpeed = 10; // 10 MB/s for large files
+            } else {
+                uploadSpeed = 5; // 5 MB/s for very large files
+            }
             
-            // Minimum 3 seconds, maximum 30 seconds for simulation
-            return Math.min(Math.max(baseDuration + additionalTime, 3000), 30000);
+            const uploadTime = (fileSizeMB / uploadSpeed) * 1000;
+            const processingTime = Math.min(fileSizeMB * 50, 5000); // Processing overhead
+            
+            return Math.max(baseDuration, uploadTime + processingTime);
+        },
+        
+        getUploadPhaseText() {
+            switch (this.uploadPhase) {
+                case 'preparing':
+                    return 'Preparing upload...';
+                case 'uploading':
+                    return 'Uploading file...';
+                case 'processing':
+                    return 'Processing file...';
+                case 'completing':
+                    return 'Finalizing upload...';
+                default:
+                    return 'Uploading...';
+            }
         },
         
         simulateUpload() {
             this.uploadStartTime = Date.now();
             this.uploadProgress = 0;
+            this.uploadedBytes = 0;
+            this.uploadPhase = 'preparing';
             
             const totalDuration = this.calculateUploadDuration();
-            const updateInterval = 100; // Update every 100ms
+            const updateInterval = 100; // Update every 100ms for smoother animation
             const totalSteps = totalDuration / updateInterval;
             let currentStep = 0;
+            
+            // Phase durations (as percentage of total time)
+            const preparingPhase = 0.05; // 5%
+            const uploadingPhase = 0.80; // 80%
+            const processingPhase = 0.12; // 12%
+            const completingPhase = 0.03; // 3%
             
             this.uploadInterval = setInterval(() => {
                 this.updateUploadTime();
                 currentStep++;
                 
-                // Realistic upload progress curve
-                let progressIncrement;
-                const progressPercent = (currentStep / totalSteps) * 100;
+                const timeProgress = currentStep / totalSteps;
+                let targetProgress = 0;
                 
-                if (progressPercent < 10) {
-                    // Fast initial progress (connection established)
-                    progressIncrement = Math.random() * 8 + 2;
-                } else if (progressPercent < 30) {
-                    // Steady progress
-                    progressIncrement = Math.random() * 4 + 1;
-                } else if (progressPercent < 70) {
-                    // Main upload phase
-                    progressIncrement = Math.random() * 3 + 0.5;
-                } else if (progressPercent < 90) {
-                    // Slower near completion
-                    progressIncrement = Math.random() * 2 + 0.2;
-                } else if (progressPercent < 98) {
-                    // Very slow final processing
-                    progressIncrement = Math.random() * 1 + 0.1;
+                // Determine current phase and calculate progress
+                if (timeProgress < preparingPhase) {
+                    // Preparing phase (0-2%)
+                    this.uploadPhase = 'preparing';
+                    targetProgress = (timeProgress / preparingPhase) * 2;
+                } else if (timeProgress < preparingPhase + uploadingPhase) {
+                    // Main upload phase (2-85%)
+                    this.uploadPhase = 'uploading';
+                    const phaseProgress = (timeProgress - preparingPhase) / uploadingPhase;
+                    
+                    // Realistic upload curve: fast start, steady middle, slower end
+                    let uploadCurve;
+                    if (phaseProgress < 0.3) {
+                        // Fast initial upload (30% of time, 50% of progress)
+                        uploadCurve = phaseProgress / 0.3 * 0.5;
+                    } else if (phaseProgress < 0.9) {
+                        // Steady upload (60% of time, 40% of progress)
+                        uploadCurve = 0.5 + ((phaseProgress - 0.3) / 0.6) * 0.4;
+                    } else {
+                        // Slower final upload (10% of time, 10% of progress)
+                        uploadCurve = 0.9 + ((phaseProgress - 0.9) / 0.1) * 0.1;
+                    }
+                    
+                    targetProgress = 2 + uploadCurve * 83; // 2% to 85%
+                    this.uploadedBytes = Math.floor((targetProgress / 100) * this.totalBytes);
+                } else if (timeProgress < preparingPhase + uploadingPhase + processingPhase) {
+                    // Processing phase (85-95%)
+                    this.uploadPhase = 'processing';
+                    const phaseProgress = (timeProgress - preparingPhase - uploadingPhase) / processingPhase;
+                    targetProgress = 85 + phaseProgress * 10;
+                    this.uploadedBytes = this.totalBytes;
                 } else {
-                    // Final completion
-                    progressIncrement = Math.random() * 0.5 + 0.1;
+                    // Completing phase (95-100%)
+                    this.uploadPhase = 'completing';
+                    const phaseProgress = (timeProgress - preparingPhase - uploadingPhase - processingPhase) / completingPhase;
+                    targetProgress = 95 + phaseProgress * 5;
+                    this.uploadedBytes = this.totalBytes;
                 }
                 
-                this.uploadProgress = Math.min(this.uploadProgress + progressIncrement, 100);
+                // Add slight randomness for realism (±1%)
+                const randomFactor = (Math.random() - 0.5) * 2;
+                this.uploadProgress = Math.min(Math.max(targetProgress + randomFactor, 0), 100);
                 
-                // Complete when we reach 100% or time is up
-                if (this.uploadProgress >= 100 || currentStep >= totalSteps) {
+                // Complete upload
+                if (currentStep >= totalSteps || this.uploadProgress >= 100) {
                     this.uploadProgress = 100;
+                    this.uploadedBytes = this.totalBytes;
+                    this.uploadPhase = 'completing';
                     clearInterval(this.uploadInterval);
                     
-                    // Show completion for 2 seconds, then submit form
+                    // Show completion for a moment before submitting
                     setTimeout(() => {
                         this.submitActualForm();
-                    }, 2000);
+                    }, 1500);
                 }
             }, updateInterval);
         },
         
         submitActualForm() {
-            // Create a new form submission without the event handler
-            const form = document.querySelector('form');
+            const form = this.$refs.uploadForm;
             const formData = new FormData(form);
             
-            // Submit using fetch to avoid triggering the event handler again
             fetch(form.action || window.location.href, {
                 method: 'POST',
                 body: formData,
@@ -583,22 +857,33 @@ function uploadForm() {
                 }
             }).then(response => {
                 if (response.ok) {
-                    // Redirect to success page or reload
-                    window.location.href = response.url || '{% url "adminpage:software_list" %}';
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else {
+                        window.location.reload();
+                    }
                 } else {
-                    throw new Error('Upload failed');
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
             }).catch(error => {
                 console.error('Upload error:', error);
-                this.handleUploadError('Upload failed. Please try again.');
+                this.handleUploadError('Upload failed: ' + error.message);
             });
         },
         
         handleUploadError(message) {
             this.isUploading = false;
             this.uploadProgress = 0;
+            this.uploadStartTime = null;
+            this.uploadTimeDisplay = '';
+            this.uploadSpeed = 0;
+            this.uploadedBytes = 0;
+            this.estimatedTimeRemaining = '';
+            this.uploadPhase = 'preparing';
+            
             if (this.uploadInterval) {
                 clearInterval(this.uploadInterval);
+                this.uploadInterval = null;
             }
             alert(message);
         },
@@ -606,7 +891,11 @@ function uploadForm() {
         handleFormSubmit(event) {
             event.preventDefault();
             
-            // Basic form validation
+            // Clear previous errors
+            this.fileError = '';
+            this.thumbnailError = '';
+            
+            // Form validation
             const title = document.getElementById('id_title').value.trim();
             const file = document.getElementById('id_file').files[0];
             const category = document.getElementById('id_category').value;
@@ -619,8 +908,7 @@ function uploadForm() {
             }
             
             if (!file) {
-                alert('Please select a software file to upload.');
-                document.getElementById('id_file').focus();
+                this.fileError = 'Please select a software file to upload.';
                 return;
             }
             
@@ -636,16 +924,22 @@ function uploadForm() {
                 return;
             }
             
-            // Check file size (optional warning for large files)
-            const maxSize = 500 * 1024 * 1024; // 500MB
+            // Final file validation and warning for large files
+            const maxSize = 500 * 1024 * 1024;
             if (file.size > maxSize) {
-                if (!confirm('The file is quite large (' + this.formatFileSize(file.size) + '). This may take a while to upload. Continue?')) {
+                this.fileError = 'File size too large. Maximum allowed size is 500MB.';
+                return;
+            }
+            
+            if (file.size > 100 * 1024 * 1024) { // Warn for files > 100MB
+                if (!confirm(`The file is quite large (${this.formatFileSize(file.size)}). This may take a while to upload. Continue?`)) {
                     return;
                 }
             }
             
-            // Start upload process
+            // Start upload simulation
             this.isUploading = true;
+            this.totalBytes = file.size;
             this.simulateUpload();
         },
         
@@ -654,35 +948,51 @@ function uploadForm() {
             this.uploadProgress = 0;
             this.uploadStartTime = null;
             this.uploadTimeDisplay = '';
+            this.uploadSpeed = 0;
+            this.uploadedBytes = 0;
+            this.estimatedTimeRemaining = '';
+            this.uploadPhase = 'preparing';
+            
             if (this.uploadInterval) {
                 clearInterval(this.uploadInterval);
+                this.uploadInterval = null;
             }
         },
         
         init() {
-            // Handle file input changes
-            document.getElementById('id_file').addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    const file = e.target.files[0];
-                    this.selectedFile = file.name;
-                    this.fileSize = this.formatFileSize(file.size);
-                }
-            });
+            // File input change handlers
+            const fileInput = document.getElementById('id_file');
+            const thumbnailInput = document.getElementById('id_thumbnail');
             
-            document.getElementById('id_thumbnail').addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    const file = e.target.files[0];
-                    this.thumbnailFile = file.name;
-                    this.previewThumbnail(file);
-                }
-            });
+            if (fileInput) {
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.processFile(e.target.files[0], 'file');
+                    }
+                });
+            }
             
-            // Handle browser back/refresh during upload
+            if (thumbnailInput) {
+                thumbnailInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.processFile(e.target.files[0], 'thumbnail');
+                    }
+                });
+            }
+            
+            // Prevent accidental navigation during upload
             window.addEventListener('beforeunload', (e) => {
                 if (this.isUploading) {
                     e.preventDefault();
                     e.returnValue = 'Upload is in progress. Are you sure you want to leave?';
                     return e.returnValue;
+                }
+            });
+            
+            // Cleanup on page unload
+            window.addEventListener('unload', () => {
+                if (this.uploadInterval) {
+                    clearInterval(this.uploadInterval);
                 }
             });
         }
