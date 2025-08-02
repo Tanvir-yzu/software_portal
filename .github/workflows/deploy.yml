@@ -1,0 +1,40 @@
+name: Automatic Deployment Software Portal
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          timeout: 300s
+          command_timeout: 300s
+          script_stop: true
+          script: |
+            set -e
+            echo "🚀 Starting deployment at $(date)"
+            
+            # Navigate to project directory
+            cd /opt/software_portal || { echo "❌ Failed to cd into /opt/software_portal"; exit 1; }
+            
+            # Pull latest changes
+            echo "🔄 Pulling latest changes from Git..."
+            git fetch origin
+            git reset --hard origin/main
+            
+            # Make deploy script executable and run it
+            chmod +x ./deploy.sh
+            ./deploy.sh
+            
+            echo "✅ Deployment workflow complete at $(date)"
