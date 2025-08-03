@@ -116,7 +116,26 @@ class CategoryAPIView(View):
             })
         
         return JsonResponse({'categories': data})
-    
+
+
+def robots_txt(request):
+    """Generate robots.txt file"""
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "",
+        "# Disallow admin and API endpoints from indexing",
+        "Disallow: /admin/",
+        "Disallow: /adminpage/",
+        "Disallow: /api/",
+        "",
+        "# Allow sitemap",
+        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
+        "",
+        "# Crawl delay (optional)",
+        "Crawl-delay: 1",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
     
 
 class PrivacyPolicyView(TemplateView):
