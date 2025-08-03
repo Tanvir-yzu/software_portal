@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Privacy Policy - Software Portal</title>
+    <meta name="description" content="Privacy Policy for Software Portal. Learn how we collect, use, and protect your personal information when you use our software download platform.">
+    <meta name="keywords" content="privacy policy, data protection, personal information, software portal, privacy rights">
+    <meta name="author" content="Software Portal">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Software Portal">
+    <meta property="og:title" content="Privacy Policy - Software Portal">
+    <meta property="og:description" content="Privacy Policy for Software Portal. Learn how we collect, use, and protect your personal information.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% static 'icon/android-chrome-512x512.png' %}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Privacy Policy - Software Portal">
+    <meta name="twitter:description" content="Privacy Policy for Software Portal. Learn how we collect, use, and protect your personal information.">
+    <meta name="twitter:image" content="{% static 'icon/android-chrome-512x512.png' %}">
+    
+    <!-- Favicon and Icons -->
+    <link rel="shortcut icon" href="{% static 'icon/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icon/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'icon/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'icon/site.webmanifest' %}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            min-height: 70px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #1f2937;
+        }
+
+        .header-icon {
+            color: #2563eb;
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+            background-color: #f3f4f6;
+        }
+
+        .nav-link.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 32px 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .section-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #4b5563;
+        }
+
+        .section-content p {
+            margin-bottom: 16px;
+        }
+
+        .section-content ul {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .section-content li {
+            margin-bottom: 8px;
+        }
+
+        .section-content strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .highlight-box .icon {
+            color: #0ea5e9;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        .contact-info {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            border-left: 4px solid #2563eb;
+        }
+
+        .contact-info h4 {
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .contact-info p {
+            margin-bottom: 8px;
+        }
+
+        .contact-info a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: #d1d5db;
+            padding: 32px 0;
+            margin-top: 48px;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: #60a5fa;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 0;
+            }
+
+            .nav-links {
+                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .content-section {
+                padding: 24px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 24px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{% url 'software:software_list' %}" class="header-brand">
+                    <i class="fas fa-download header-icon"></i>
+                    <span class="header-title">Software Portal</span>
+                </a>
+                
+                <nav class="nav-links">
+                    <a href="{% url 'software:software_list' %}" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="{% url 'software:about_us' %}" class="nav-link">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                    <a href="{% url 'software:contact_us' %}" class="nav-link">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                    <a href="{% url 'software:privacy_policy' %}" class="nav-link active">
+                        <i class="fas fa-shield-alt"></i> Privacy
+                    </a>
+                    <a href="{% url 'software:terms_of_service' %}" class="nav-link">
+                        <i class="fas fa-file-contract"></i> Terms
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-shield-alt" style="color: #2563eb; margin-right: 12px;"></i>
+                    Privacy Policy
+                </h1>
+                <p class="page-subtitle">
+                    Your privacy is important to us. This policy explains how we collect, use, and protect your information when you use Software Portal.
+                </p>
+            </div>
+
+            <!-- Last Updated -->
+            <div class="highlight-box">
+                <i class="fas fa-calendar-alt icon"></i>
+                <strong>Last Updated:</strong> {{ "now"|date:"F d, Y" }}
+            </div>
+
+            <!-- Information We Collect -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-database" style="color: #2563eb; margin-right: 8px;"></i>
+                    Information We Collect
+                </h2>
+                <div class="section-content">
+                    <p>We collect information to provide better services to our users. The types of information we collect include:</p>
+                    
+                    <h4><strong>Information You Provide</strong></h4>
+                    <ul>
+                        <li>Account information when you register (username, email address)</li>
+                        <li>Software uploads and associated metadata</li>
+                        <li>Comments, reviews, and feedback you submit</li>
+                        <li>Communications with our support team</li>
+                    </ul>
+
+                    <h4><strong>Information We Collect Automatically</strong></h4>
+                    <ul>
+                        <li>Device information (browser type, operating system, device identifiers)</li>
+                        <li>Usage data (pages visited, time spent, download activity)</li>
+                        <li>IP address and location information</li>
+                        <li>Cookies and similar tracking technologies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- How We Use Information -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-cogs" style="color: #2563eb; margin-right: 8px;"></i>
+                    How We Use Your Information
+                </h2>
+                <div class="section-content">
+                    <p>We use the information we collect for the following purposes:</p>
+                    <ul>
+                        <li><strong>Service Provision:</strong> To provide, maintain, and improve our software download platform</li>
+                        <li><strong>User Support:</strong> To respond to your inquiries and provide customer support</li>
+                        <li><strong>Security:</strong> To protect against fraud, abuse, and security threats</li>
+                        <li><strong>Analytics:</strong> To understand how users interact with our platform and improve user experience</li>
+                        <li><strong>Communications:</strong> To send important updates, security alerts, and service notifications</li>
+                        <li><strong>Legal Compliance:</strong> To comply with applicable laws and regulations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Information Sharing -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-share-alt" style="color: #2563eb; margin-right: 8px;"></i>
+                    Information Sharing and Disclosure
+                </h2>
+                <div class="section-content">
+                    <p>We do not sell, trade, or rent your personal information to third parties. We may share your information only in the following circumstances:</p>
+                    <ul>
+                        <li><strong>With Your Consent:</strong> When you explicitly agree to share information</li>
+                        <li><strong>Service Providers:</strong> With trusted third-party service providers who assist in operating our platform</li>
+                        <li><strong>Legal Requirements:</strong> When required by law, court order, or government request</li>
+                        <li><strong>Safety and Security:</strong> To protect the rights, property, or safety of our users or the public</li>
+                        <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Data Security -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-lock" style="color: #2563eb; margin-right: 8px;"></i>
+                    Data Security
+                </h2>
+                <div class="section-content">
+                    <p>We implement appropriate technical and organizational measures to protect your personal information:</p>
+                    <ul>
+                        <li>Encryption of data in transit and at rest</li>
+                        <li>Regular security assessments and updates</li>
+                        <li>Access controls and authentication mechanisms</li>
+                        <li>Secure data storage and backup procedures</li>
+                        <li>Employee training on data protection practices</li>
+                    </ul>
+                    <p>However, no method of transmission over the internet or electronic storage is 100% secure. While we strive to protect your information, we cannot guarantee absolute security.</p>
+                </div>
+            </div>
+
+            <!-- Your Rights -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-user-shield" style="color: #2563eb; margin-right: 8px;"></i>
+                    Your Privacy Rights
+                </h2>
+                <div class="section-content">
+                    <p>You have the following rights regarding your personal information:</p>
+                    <ul>
+                        <li><strong>Access:</strong> Request access to your personal information we hold</li>
+                        <li><strong>Correction:</strong> Request correction of inaccurate or incomplete information</li>
+                        <li><strong>Deletion:</strong> Request deletion of your personal information</li>
+                        <li><strong>Portability:</strong> Request a copy of your data in a portable format</li>
+                        <li><strong>Objection:</strong> Object to certain processing of your information</li>
+                        <li><strong>Restriction:</strong> Request restriction of processing in certain circumstances</li>
+                    </ul>
+                    <p>To exercise these rights, please contact us using the information provided below.</p>
+                </div>
+            </div>
+
+            <!-- Cookies -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-cookie-bite" style="color: #2563eb; margin-right: 8px;"></i>
+                    Cookies and Tracking Technologies
+                </h2>
+                <div class="section-content">
+                    <p>We use cookies and similar technologies to enhance your experience on our platform:</p>
+                    <ul>
+                        <li><strong>Essential Cookies:</strong> Required for basic site functionality</li>
+                        <li><strong>Analytics Cookies:</strong> Help us understand how users interact with our site</li>
+                        <li><strong>Preference Cookies:</strong> Remember your settings and preferences</li>
+                        <li><strong>Marketing Cookies:</strong> Used to deliver relevant advertisements</li>
+                    </ul>
+                    <p>You can control cookie settings through your browser preferences. However, disabling certain cookies may affect site functionality.</p>
+                </div>
+            </div>
+
+            <!-- Children's Privacy -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-child" style="color: #2563eb; margin-right: 8px;"></i>
+                    Children's Privacy
+                </h2>
+                <div class="section-content">
+                    <p>Our service is not intended for children under the age of 13. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us immediately.</p>
+                </div>
+            </div>
+
+            <!-- Changes to Policy -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-edit" style="color: #2563eb; margin-right: 8px;"></i>
+                    Changes to This Privacy Policy
+                </h2>
+                <div class="section-content">
+                    <p>We may update this Privacy Policy from time to time. When we make changes, we will:</p>
+                    <ul>
+                        <li>Update the "Last Updated" date at the top of this policy</li>
+                        <li>Notify users of significant changes via email or platform notification</li>
+                        <li>Provide a summary of key changes when applicable</li>
+                    </ul>
+                    <p>Your continued use of our service after changes become effective constitutes acceptance of the updated policy.</p>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h4><i class="fas fa-envelope" style="color: #2563eb; margin-right: 8px;"></i>Contact Us</h4>
+                <p>If you have any questions about this Privacy Policy or our data practices, please contact us:</p>
+                <p><strong>Email:</strong> <a href="mailto:privacy@softwareportal.com">privacy@softwareportal.com</a></p>
+                <p><strong>Address:</strong> Software Portal Privacy Team,</p>
+                <p><strong>Phone:</strong> <a href="tel:+8618252737084">+86 18252737084</a></p>
+                <p>We will respond to your inquiry within 30 days.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="{% url 'software:software_list' %}" class="footer-link">Home</a>
+                    <a href="{% url 'software:about_us' %}" class="footer-link">About Us</a>
+                    <a href="{% url 'software:contact_us' %}" class="footer-link">Contact</a>
+                    <a href="{% url 'software:privacy_policy' %}" class="footer-link">Privacy Policy</a>
+                    <a href="{% url 'software:terms_of_service' %}" class="footer-link">Terms of Service</a>
+                </div>
+                <p class="footer-text">
+                    © {{ "now"|date:"Y" }} Software Portal. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

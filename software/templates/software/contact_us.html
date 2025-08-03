@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Contact Us - Software Portal</title>
+    <meta name="description" content="Get in touch with Software Portal. Contact our support team for help, feedback, or business inquiries. We're here to help you with all your software needs.">
+    <meta name="keywords" content="contact us, support, help, feedback, software portal, customer service, technical support">
+    <meta name="author" content="Software Portal">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Software Portal">
+    <meta property="og:title" content="Contact Us - Software Portal">
+    <meta property="og:description" content="Get in touch with Software Portal. Contact our support team for help, feedback, or business inquiries.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% static 'icon/android-chrome-512x512.png' %}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Contact Us - Software Portal">
+    <meta name="twitter:description" content="Get in touch with Software Portal. Contact our support team for help, feedback, or business inquiries.">
+    <meta name="twitter:image" content="{% static 'icon/android-chrome-512x512.png' %}">
+    
+    <!-- Favicon and Icons -->
+    <link rel="shortcut icon" href="{% static 'icon/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icon/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'icon/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'icon/site.webmanifest' %}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            min-height: 70px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #1f2937;
+        }
+
+        .header-icon {
+            color: #2563eb;
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+            background-color: #f3f4f6;
+        }
+
+        .nav-link.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 32px 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .contact-form-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 32px;
+        }
+
+        .contact-info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 32px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            color: #2563eb;
+            margin-right: 12px;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-label i {
+            color: #6b7280;
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-button {
+            background: #2563eb;
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .form-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .form-button:active {
+            transform: translateY(0);
+        }
+
+        .form-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Contact Info Cards */
+        .contact-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-card {
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .contact-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .contact-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .contact-card-icon {
+            background: #eff6ff;
+            color: #2563eb;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-right: 16px;
+        }
+
+        .contact-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .contact-card-content {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .contact-card-content a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .contact-card-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 20px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .faq-question:hover {
+            color: #2563eb;
+        }
+
+        .faq-answer {
+            color: #6b7280;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        .faq-toggle {
+            color: #6b7280;
+            transition: transform 0.2s;
+        }
+
+        .faq-toggle.active {
+            transform: rotate(180deg);
+        }
+
+        /* Success/Error Messages */
+        .message {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #f0fdf4;
+            border: 1px solid #22c55e;
+            color: #15803d;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            color: #dc2626;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: #d1d5db;
+            padding: 32px 0;
+            margin-top: 48px;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: #60a5fa;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 0;
+            }
+
+            .nav-links {
+                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .contact-form-section,
+            .contact-info-section,
+            .faq-section {
+                padding: 24px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 24px;
+            }
+
+            .contact-form-section,
+            .contact-info-section,
+            .faq-section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{% url 'software:software_list' %}" class="header-brand">
+                    <i class="fas fa-download header-icon"></i>
+                    <span class="header-title">Software Portal</span>
+                </a>
+                
+                <nav class="nav-links">
+                    <a href="{% url 'software:software_list' %}" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="{% url 'software:about_us' %}" class="nav-link">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                    <a href="{% url 'software:contact_us' %}" class="nav-link active">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                    <a href="{% url 'software:privacy_policy' %}" class="nav-link">
+                        <i class="fas fa-shield-alt"></i> Privacy
+                    </a>
+                    <a href="{% url 'software:terms_of_service' %}" class="nav-link">
+                        <i class="fas fa-file-contract"></i> Terms
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-envelope" style="color: #2563eb; margin-right: 12px;"></i>
+                    Contact Us
+                </h1>
+                <p class="page-subtitle">
+                    We'd love to hear from you! Get in touch with our team for support, feedback, or any questions about Software Portal.
+                </p>
+            </div>
+
+            <!-- Contact Grid -->
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="contact-form-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-paper-plane"></i>
+                        Send us a Message
+                    </h2>
+                    
+                    <div id="message" class="message"></div>
+                    
+                    <form class="contact-form" id="contactForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-user"></i>
+                                Full Name *
+                            </label>
+                            <input type="text" id="name" name="name" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope"></i>
+                                Email Address *
+                            </label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject" class="form-label">
+                                <i class="fas fa-tag"></i>
+                                Subject *
+                            </label>
+                            <select id="subject" name="subject" class="form-select" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="bug">Bug Report</option>
+                                <option value="feature">Feature Request</option>
+                                <option value="business">Business Partnership</option>
+                                <option value="dmca">DMCA / Copyright</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" class="form-label">
+                                <i class="fas fa-comment"></i>
+                                Message *
+                            </label>
+                            <textarea id="messageText" name="message" class="form-textarea" placeholder="Please describe your inquiry in detail..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="form-button" id="submitBtn">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="contact-info-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-address-book"></i>
+                        Get in Touch
+                    </h2>
+                    
+                    <div class="contact-cards">
+                        <div class="contact-card">
+                            <div class="contact-card-header">
+                                <div class="contact-card-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <h3 class="contact-card-title">Email Support</h3>
+                            </div>
+                            <div class="contact-card-content">
+                                <p><strong>General:</strong> <a href="mailto:info@softwareportal.com">info@softwareportal.com</a></p>
+                                <p><strong>Support:</strong> <a href="mailto:support@softwareportal.com">support@softwareportal.com</a></p>
+                                <p><strong>Business:</strong> <a href="mailto:business@softwareportal.com">business@softwareportal.com</a></p>
+                                <p>We typically respond within 24 hours</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-card-header">
+                                <div class="contact-card-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <h3 class="contact-card-title">Phone Support</h3>
+                            </div>
+                            <div class="contact-card-content">
+                                <p><strong>Main:</strong> <a href="tel:+1234567890">+1 (234) 567-8900</a></p>
+                                <p><strong>Support:</strong> <a href="tel:+1234567891">+1 (234) 567-8901</a></p>
+                                <p><strong>Hours:</strong> Mon-Fri, 9 AM - 6 PM EST</p>
+                                <p>For urgent technical issues</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-card-header">
+                                <div class="contact-card-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <h3 class="contact-card-title">Office Address</h3>
+                            </div>
+                            <div class="contact-card-content">
+                                <p>Software Portal Inc.</p>
+                                <p>123 Tech Street, Suite 456</p>
+                                <p>San Francisco, CA 94105</p>
+                                <p>United States</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-card-header">
+                                <div class="contact-card-icon">
+                                    <i class="fas fa-share-alt"></i>
+                                </div>
+                                <h3 class="contact-card-title">Social Media</h3>
+                            </div>
+                            <div class="contact-card-content">
+                                <p><a href="#" target="_blank"><i class="fab fa-twitter"></i> @SoftwarePortal</a></p>
+                                <p><a href="#" target="_blank"><i class="fab fa-facebook"></i> Software Portal</a></p>
+                                <p><a href="#" target="_blank"><i class="fab fa-linkedin"></i> Software Portal</a></p>
+                                <p><a href="#" target="_blank"><i class="fab fa-github"></i> SoftwarePortal</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2 class="section-title">
+                    <i class="fas fa-question-circle"></i>
+                    Frequently Asked Questions
+                </h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        How do I download software from your platform?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Simply browse our software catalog, click on any software you're interested in, and click the download button. No registration required for downloading free software.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Is all software on your platform free?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, we focus on free and open-source software. All software available for download is free to use, though some may have specific license terms.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        How do I report a bug or security issue?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Please use the contact form above with "Bug Report" as the subject, or email us directly at support@softwareportal.com with detailed information about the issue.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        Can I upload my own software to the platform?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! Create an account and use our upload feature. All software goes through a review process to ensure quality and security before being published.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        How do you ensure software safety?
+                        <i class="fas fa-chevron-down faq-toggle"></i>
+                    </div>
+                    <div class="faq-answer">
+                        We scan all uploaded software for malware, review source code when available, and maintain strict quality guidelines. However, we recommend using antivirus software as an additional precaution.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="{% url 'software:software_list' %}" class="footer-link">Home</a>
+                    <a href="{% url 'software:about_us' %}" class="footer-link">About Us</a>
+                    <a href="{% url 'software:contact_us' %}" class="footer-link">Contact</a>
+                    <a href="{% url 'software:privacy_policy' %}" class="footer-link">Privacy Policy</a>
+                    <a href="{% url 'software:terms_of_service' %}" class="footer-link">Terms of Service</a>
+                </div>
+                <p class="footer-text">
+                    © {{ "now"|date:"Y" }} Software Portal. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Contact Form Handling
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('message');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            
+            // Get form data
+            const formData = new FormData(this);
+            
+            try {
+                // Simulate form submission (replace with actual endpoint)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Show success message
+                messageDiv.className = 'message success show';
+                messageDiv.innerHTML = '<i class="fas fa-check-circle"></i> Thank you! Your message has been sent successfully. We\'ll get back to you soon.';
+                
+                // Reset form
+                this.reset();
+                
+            } catch (error) {
+                // Show error message
+                messageDiv.className = 'message error show';
+                messageDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Sorry, there was an error sending your message. Please try again or contact us directly.';
+            } finally {
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+                
+                // Scroll to message
+                messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+
+        // FAQ Toggle Function
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const toggle = element.querySelector('.faq-toggle');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-answer').forEach(item => {
+                if (item !== answer) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            document.querySelectorAll('.faq-toggle').forEach(item => {
+                if (item !== toggle) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // Toggle current FAQ
+            answer.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+
+        // Form validation
+        document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.style.borderColor = '#ef4444';
+                } else {
+                    this.style.borderColor = '#e5e7eb';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

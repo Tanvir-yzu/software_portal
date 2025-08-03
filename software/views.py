@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse, Http404
 from django.views import View
@@ -116,3 +116,44 @@ class CategoryAPIView(View):
             })
         
         return JsonResponse({'categories': data})
+    
+    
+
+class PrivacyPolicyView(TemplateView):
+    """Privacy Policy page view"""
+    template_name = 'software/privacy_policy.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Privacy Policy'
+        return context
+
+
+class TermsOfServiceView(TemplateView):
+    """Terms of Service page view"""
+    template_name = 'software/terms_of_service.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Terms of Service'
+        return context
+
+
+class ContactUsView(TemplateView):
+    """Contact Us page view"""
+    template_name = 'software/contact_us.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Contact Us'
+        return context
+
+
+class AboutUsView(TemplateView):
+    """About Us page view"""
+    template_name = 'software/about_us.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'About Us'
+        return context

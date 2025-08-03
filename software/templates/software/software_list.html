@@ -1681,11 +1681,20 @@
         {% endif %}
     </main>
 
-    <!-- Footer -->
+     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; {% now "Y" %} Software Portal by Tanvir. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="{% url 'software:software_list' %}" class="footer-link">Home</a>
+                    <a href="{% url 'software:about_us' %}" class="footer-link">About Us</a>
+                    <a href="{% url 'software:contact_us' %}" class="footer-link">Contact</a>
+                    <a href="{% url 'software:privacy_policy' %}" class="footer-link">Privacy Policy</a>
+                    <a href="{% url 'software:terms_of_service' %}" class="footer-link">Terms of Service</a>
+                </div>
+                <p class="footer-text">
+                    © {{ "now"|date:"Y" }} Software Portal. All rights reserved.
+                </p>
             </div>
         </div>
     </footer>

@@ -16,4 +16,10 @@ urlpatterns = [
     # API endpoints
     path('api/software/', views.SoftwareAPIView.as_view(), name='software_api'),
     path('api/categories/', views.CategoryAPIView.as_view(), name='category_api'),
+    
+        # Static pages - Class-based views
+    path('privacy-policy/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
+    path('terms-of-service/', views.TermsOfServiceView.as_view(), name='terms_of_service'),
+    path('contact-us/', views.ContactUsView.as_view(), name='contact_us'),
+    path('about-us/', views.AboutUsView.as_view(), name='about_us'),
 ]

@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Terms of Service - Software Portal</title>
+    <meta name="description" content="Terms of Service for Software Portal. Read our terms and conditions for using our software download platform and services.">
+    <meta name="keywords" content="terms of service, terms and conditions, user agreement, software portal, legal terms">
+    <meta name="author" content="Software Portal">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Software Portal">
+    <meta property="og:title" content="Terms of Service - Software Portal">
+    <meta property="og:description" content="Terms of Service for Software Portal. Read our terms and conditions for using our platform.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% static 'icon/android-chrome-512x512.png' %}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Terms of Service - Software Portal">
+    <meta name="twitter:description" content="Terms of Service for Software Portal. Read our terms and conditions for using our platform.">
+    <meta name="twitter:image" content="{% static 'icon/android-chrome-512x512.png' %}">
+    
+    <!-- Favicon and Icons -->
+    <link rel="shortcut icon" href="{% static 'icon/favicon.ico' %}" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icon/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'icon/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'icon/site.webmanifest' %}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            min-height: 70px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #1f2937;
+        }
+
+        .header-icon {
+            color: #2563eb;
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #6b7280;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+            background-color: #f3f4f6;
+        }
+
+        .nav-link.active {
+            color: #2563eb;
+            background-color: #eff6ff;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding: 32px 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .section-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #4b5563;
+        }
+
+        .section-content p {
+            margin-bottom: 16px;
+        }
+
+        .section-content ul, .section-content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .section-content li {
+            margin-bottom: 8px;
+        }
+
+        .section-content strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .highlight-box .icon {
+            color: #f59e0b;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        .warning-box {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .warning-box .icon {
+            color: #ef4444;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        .info-box {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .info-box .icon {
+            color: #0ea5e9;
+            font-size: 20px;
+            margin-right: 8px;
+        }
+
+        .contact-info {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+            border-left: 4px solid #2563eb;
+        }
+
+        .contact-info h4 {
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .contact-info p {
+            margin-bottom: 8px;
+        }
+
+        .contact-info a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .numbered-section {
+            counter-reset: section-counter;
+        }
+
+        .numbered-section .section-title {
+            counter-increment: section-counter;
+        }
+
+        .numbered-section .section-title::before {
+            content: counter(section-counter) ". ";
+            color: #2563eb;
+            font-weight: 800;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: #d1d5db;
+            padding: 32px 0;
+            margin-top: 48px;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: #60a5fa;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 0;
+            }
+
+            .nav-links {
+                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .content-section {
+                padding: 24px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 24px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{% url 'software:software_list' %}" class="header-brand">
+                    <i class="fas fa-download header-icon"></i>
+                    <span class="header-title">Software Portal</span>
+                </a>
+                
+                <nav class="nav-links">
+                    <a href="{% url 'software:software_list' %}" class="nav-link">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="{% url 'software:about_us' %}" class="nav-link">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                    <a href="{% url 'software:contact_us' %}" class="nav-link">
+                        <i class="fas fa-envelope"></i> Contact
+                    </a>
+                    <a href="{% url 'software:privacy_policy' %}" class="nav-link">
+                        <i class="fas fa-shield-alt"></i> Privacy
+                    </a>
+                    <a href="{% url 'software:terms_of_service' %}" class="nav-link active">
+                        <i class="fas fa-file-contract"></i> Terms
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-file-contract" style="color: #2563eb; margin-right: 12px;"></i>
+                    Terms of Service
+                </h1>
+                <p class="page-subtitle">
+                    Please read these terms and conditions carefully before using Software Portal. By using our service, you agree to be bound by these terms.
+                </p>
+            </div>
+
+            <!-- Last Updated -->
+            <div class="highlight-box">
+                <i class="fas fa-calendar-alt icon"></i>
+                <strong>Last Updated:</strong> {{ "now"|date:"F d, Y" }}
+            </div>
+
+            <!-- Important Notice -->
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle icon"></i>
+                <strong>Important:</strong> By accessing and using Software Portal, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service and our Privacy Policy.
+            </div>
+
+            <div class="numbered-section">
+                <!-- Acceptance of Terms -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-handshake" style="color: #2563eb; margin-right: 8px;"></i>
+                        Acceptance of Terms
+                    </h2>
+                    <div class="section-content">
+                        <p>These Terms of Service ("Terms") govern your use of Software Portal ("Service") operated by Software Portal ("us", "we", or "our"). By accessing or using our Service, you agree to be bound by these Terms.</p>
+                        <p>If you disagree with any part of these terms, then you may not access the Service. These Terms apply to all visitors, users, and others who access or use the Service.</p>
+                    </div>
+                </div>
+
+                <!-- Description of Service -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-server" style="color: #2563eb; margin-right: 8px;"></i>
+                        Description of Service
+                    </h2>
+                    <div class="section-content">
+                        <p>Software Portal is a platform that allows users to:</p>
+                        <ul>
+                            <li>Browse and search for software applications</li>
+                            <li>Download free and open-source software</li>
+                            <li>Upload and share software (for registered users)</li>
+                            <li>Read reviews and ratings of software</li>
+                            <li>Access software documentation and support resources</li>
+                        </ul>
+                        <p>We reserve the right to modify, suspend, or discontinue any part of the Service at any time without notice.</p>
+                    </div>
+                </div>
+
+                <!-- User Accounts -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-user-circle" style="color: #2563eb; margin-right: 8px;"></i>
+                        User Accounts
+                    </h2>
+                    <div class="section-content">
+                        <p>To access certain features of the Service, you may be required to create an account. When creating an account, you agree to:</p>
+                        <ul>
+                            <li>Provide accurate, current, and complete information</li>
+                            <li>Maintain and update your information to keep it accurate</li>
+                            <li>Maintain the security of your password and account</li>
+                            <li>Accept responsibility for all activities under your account</li>
+                            <li>Notify us immediately of any unauthorized use of your account</li>
+                        </ul>
+                        <p>We reserve the right to suspend or terminate accounts that violate these Terms or engage in prohibited activities.</p>
+                    </div>
+                </div>
+
+                <!-- Acceptable Use -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-check-circle" style="color: #2563eb; margin-right: 8px;"></i>
+                        Acceptable Use Policy
+                    </h2>
+                    <div class="section-content">
+                        <p>You agree to use the Service only for lawful purposes and in accordance with these Terms. You agree NOT to:</p>
+                        <ul>
+                            <li>Upload, distribute, or share malicious software, viruses, or malware</li>
+                            <li>Violate any applicable laws or regulations</li>
+                            <li>Infringe upon intellectual property rights of others</li>
+                            <li>Upload content that is illegal, harmful, threatening, or offensive</li>
+                            <li>Attempt to gain unauthorized access to our systems or other users' accounts</li>
+                            <li>Use automated tools to scrape or harvest data from the Service</li>
+                            <li>Interfere with or disrupt the Service or servers</li>
+                            <li>Impersonate any person or entity</li>
+                            <li>Spam or send unsolicited communications to other users</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Content and Software -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-file-code" style="color: #2563eb; margin-right: 8px;"></i>
+                        Content and Software
+                    </h2>
+                    <div class="section-content">
+                        <h4><strong>User-Generated Content</strong></h4>
+                        <p>By uploading content to our Service, you:</p>
+                        <ul>
+                            <li>Retain ownership of your intellectual property rights</li>
+                            <li>Grant us a license to use, display, and distribute your content</li>
+                            <li>Represent that you have the right to upload and share the content</li>
+                            <li>Agree that your content complies with our content guidelines</li>
+                        </ul>
+
+                        <h4><strong>Third-Party Software</strong></h4>
+                        <p>Software available on our platform may be subject to third-party licenses. You are responsible for:</p>
+                        <ul>
+                            <li>Reading and complying with software licenses</li>
+                            <li>Understanding the terms of use for downloaded software</li>
+                            <li>Ensuring compatibility with your systems</li>
+                            <li>Using software at your own risk</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Intellectual Property -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-copyright" style="color: #2563eb; margin-right: 8px;"></i>
+                        Intellectual Property Rights
+                    </h2>
+                    <div class="section-content">
+                        <p>The Service and its original content, features, and functionality are owned by Software Portal and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.</p>
+                        <p>You may not:</p>
+                        <ul>
+                            <li>Copy, modify, or distribute our proprietary content</li>
+                            <li>Reverse engineer or attempt to extract source code</li>
+                            <li>Remove or alter any proprietary notices</li>
+                            <li>Use our trademarks without permission</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Privacy and Data -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt" style="color: #2563eb; margin-right: 8px;"></i>
+                        Privacy and Data Protection
+                    </h2>
+                    <div class="section-content">
+                        <p>Your privacy is important to us. Our collection and use of personal information is governed by our Privacy Policy, which is incorporated into these Terms by reference.</p>
+                        <p>By using the Service, you consent to:</p>
+                        <ul>
+                            <li>Collection and processing of your data as described in our Privacy Policy</li>
+                            <li>Use of cookies and tracking technologies</li>
+                            <li>Transfer of data to third-party service providers</li>
+                            <li>Storage of data in various jurisdictions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Disclaimers -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-exclamation-triangle" style="color: #2563eb; margin-right: 8px;"></i>
+                        Disclaimers and Warranties
+                    </h2>
+                    <div class="section-content">
+                        <div class="warning-box">
+                            <i class="fas fa-exclamation-triangle icon"></i>
+                            <strong>Important Disclaimer:</strong> The Service is provided "as is" and "as available" without warranties of any kind.
+                        </div>
+                        <p>We disclaim all warranties, including but not limited to:</p>
+                        <ul>
+                            <li>Merchantability and fitness for a particular purpose</li>
+                            <li>Non-infringement of third-party rights</li>
+                            <li>Accuracy, reliability, or completeness of content</li>
+                            <li>Uninterrupted or error-free operation</li>
+                            <li>Security of data transmission or storage</li>
+                        </ul>
+                        <p>You download and use software at your own risk. We are not responsible for any damage to your computer, data loss, or other harm resulting from your use of the Service.</p>
+                    </div>
+                </div>
+
+                <!-- Limitation of Liability -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-balance-scale" style="color: #2563eb; margin-right: 8px;"></i>
+                        Limitation of Liability
+                    </h2>
+                    <div class="section-content">
+                        <p>To the maximum extent permitted by law, Software Portal shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to:</p>
+                        <ul>
+                            <li>Loss of profits, data, or business opportunities</li>
+                            <li>Computer damage or system failure</li>
+                            <li>Cost of substitute services</li>
+                            <li>Unauthorized access to your data</li>
+                            <li>Third-party claims or actions</li>
+                        </ul>
+                        <p>Our total liability shall not exceed the amount you paid for the Service in the 12 months preceding the claim.</p>
+                    </div>
+                </div>
+
+                <!-- Indemnification -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt" style="color: #2563eb; margin-right: 8px;"></i>
+                        Indemnification
+                    </h2>
+                    <div class="section-content">
+                        <p>You agree to indemnify, defend, and hold harmless Software Portal and its officers, directors, employees, and agents from any claims, damages, losses, or expenses arising from:</p>
+                        <ul>
+                            <li>Your use of the Service</li>
+                            <li>Your violation of these Terms</li>
+                            <li>Your violation of any rights of another party</li>
+                            <li>Content you upload or share through the Service</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Termination -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-times-circle" style="color: #2563eb; margin-right: 8px;"></i>
+                        Termination
+                    </h2>
+                    <div class="section-content">
+                        <p>We may terminate or suspend your account and access to the Service immediately, without prior notice, for any reason, including:</p>
+                        <ul>
+                            <li>Violation of these Terms</li>
+                            <li>Fraudulent or illegal activity</li>
+                            <li>Prolonged inactivity</li>
+                            <li>Technical or security reasons</li>
+                        </ul>
+                        <p>Upon termination, your right to use the Service will cease immediately, and we may delete your account and associated data.</p>
+                    </div>
+                </div>
+
+                <!-- Governing Law -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-gavel" style="color: #2563eb; margin-right: 8px;"></i>
+                        Governing Law and Jurisdiction
+                    </h2>
+                    <div class="section-content">
+                        <p>These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law provisions.</p>
+                        <p>Any disputes arising from these Terms or your use of the Service shall be resolved in the courts of [Your Jurisdiction].</p>
+                    </div>
+                </div>
+
+                <!-- Changes to Terms -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-edit" style="color: #2563eb; margin-right: 8px;"></i>
+                        Changes to Terms
+                    </h2>
+                    <div class="section-content">
+                        <p>We reserve the right to modify these Terms at any time. When we make changes, we will:</p>
+                        <ul>
+                            <li>Update the "Last Updated" date</li>
+                            <li>Notify users of significant changes</li>
+                            <li>Provide reasonable notice before changes take effect</li>
+                        </ul>
+                        <p>Your continued use of the Service after changes become effective constitutes acceptance of the new Terms.</p>
+                    </div>
+                </div>
+
+                <!-- Severability -->
+                <div class="content-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-puzzle-piece" style="color: #2563eb; margin-right: 8px;"></i>
+                        Severability and Entire Agreement
+                    </h2>
+                    <div class="section-content">
+                        <p>If any provision of these Terms is found to be unenforceable, the remaining provisions will remain in full force and effect.</p>
+                        <p>These Terms, together with our Privacy Policy, constitute the entire agreement between you and Software Portal regarding the Service.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="contact-info">
+                <h4><i class="fas fa-envelope" style="color: #2563eb; margin-right: 8px;"></i>Contact Us</h4>
+                <p>If you have any questions about these Terms of Service, please contact us:</p>
+                <p><strong>Email:</strong> <a href="mailto:legal@softwareportal.com">legal@softwareportal.com</a></p>
+                <p><strong>Address:</strong> Software Portal Legal Department, [Your Address]</p>
+                <p><strong>Phone:</strong> <a href="tel:+8618252737084">+86 18252737084</a></p>
+            </div>
+
+            <!-- Acknowledgment -->
+            <div class="info-box">
+                <i class="fas fa-info-circle icon"></i>
+                <strong>Acknowledgment:</strong> By using Software Portal, you acknowledge that you have read these Terms of Service and agree to be bound by them.
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="{% url 'software:software_list' %}" class="footer-link">Home</a>
+                    <a href="{% url 'software:about_us' %}" class="footer-link">About Us</a>
+                    <a href="{% url 'software:contact_us' %}" class="footer-link">Contact</a>
+                    <a href="{% url 'software:privacy_policy' %}" class="footer-link">Privacy Policy</a>
+                    <a href="{% url 'software:terms_of_service' %}" class="footer-link">Terms of Service</a>
+                </div>
+                <p class="footer-text">
+                    © {{ "now"|date:"Y" }} Software Portal. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
