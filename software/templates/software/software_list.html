@@ -35,6 +35,7 @@
     <meta name="twitter:description" content="{% if search_query %}Search results for '{{ search_query }}' - {% endif %}{% if selected_category %}{% for category in categories %}{% if category.id|stringformat:'s' == selected_category %}{{ category.name }} software collection - {% endif %}{% endfor %}{% endif %}Browse and download free software from our comprehensive software portal.">
     <meta name="twitter:image" content="{% static 'icon/android-chrome-512x512.png' %}">
     <meta name="twitter:image:alt" content="Software Portal Logo">
+    <meta name="google-adsense-account" content="ca-pub-6985017303947716">
     
     <!-- Additional SEO Meta Tags -->
     <meta name="theme-color" content="#2563eb">
@@ -43,6 +44,8 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6985017303947716"
+     crossorigin="anonymous"></script>
     
     <!-- Favicon and Icons -->
     <link rel="shortcut icon" href="{% static 'icon/favicon.ico' %}" type="image/x-icon">
