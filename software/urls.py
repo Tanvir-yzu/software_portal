@@ -25,4 +25,5 @@ urlpatterns = [
     
     # SEO files
     path('robots.txt', views.robots_txt, name='robots_txt'),
+    path('ads.txt', views.ads_txt, name='ads_txt'),
 ]

@@ -176,3 +176,19 @@ class AboutUsView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['page_title'] = 'About Us'
         return context
+    
+    
+
+def ads_txt(request):
+    """Generate ads.txt file for digital advertising transparency"""
+    lines = [
+        "# ads.txt file for digital advertising transparency",
+        "# This file helps prevent ad fraud by declaring authorized sellers",
+        "",
+        "# Google AdSense",
+        "google.com, pub-6985017303947716, DIRECT, f08c47fec0942fa0",
+        "",
+        "# Last updated: " + request.META.get('HTTP_HOST', 'localhost'),
+        f"# Generated on: {request.build_absolute_uri('/')}",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
